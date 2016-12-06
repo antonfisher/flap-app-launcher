@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html style="height: 100%;width: 100%;padding: 0;margin: 0">
+<head>
+    <meta charset="UTF-8">
+    <title>Flap App Launcher</title>
+</head>
+<body style="height: 100%;
+             width: 100%;
+             padding: 1px;
+             margin: 0;
+             box-sizing: border-box;">
+<div style="height: 100%;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #000;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #333;
+            color: #f5f5f5;">
+    <input style="border: none;
+                  width: 100%;
+                  outline: none;
+                  background-color: inherit;
+                  color: inherit;"
+           type="text"
+           placeholder="Type application name here..."
+           id="input"
+           autofocus />
+</div>
+<script>
+    require('./renderer.js')
+</script>
+</body>
+</html>
