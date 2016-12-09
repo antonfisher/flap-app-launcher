@@ -8,26 +8,50 @@
              width: 100%;
              padding: 1px;
              margin: 0;
-             box-sizing: border-box;">
+             box-sizing: border-box;
+             font-size: 14px;">
 <div style="height: 100%;
             width: 100%;
             box-sizing: border-box;
             border: 1px solid #000;
-            padding: 5px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             background-color: #333;
             color: #f5f5f5;">
-    <input style="border: none;
-                  width: 100%;
-                  outline: none;
-                  background-color: inherit;
-                  color: inherit;"
-           type="text"
-           placeholder="Type application name here..."
-           id="input"
-           autofocus />
+    <div style="position: relative;
+                margin: 5px;
+                ">
+        <input style="top:0;
+                      left: 0;
+                      position: absolute;
+                      background: transparent;
+                      border: none;
+                      width: 100%;
+                      outline: none;
+                      color: inherit;
+                      font-size: inherit;
+                      z-index:2"
+               type="text"
+               autocomplete="off"
+               placeholder="Type application name here..."
+               id="input"
+               autofocus />
+        <input style="top:0;
+                      left: 0;
+                      position: absolute;
+                      background: transparent;
+                      border: none;
+                      width: 100%;
+                      outline: none;
+                      color: #999;
+                      font-size: inherit;
+                      z-index:1"
+               id="autocomplete"
+               autocomplete="off"
+               type="text"
+               disabled="disabled" />
+    </div>
 </div>
 <script>
     require('./renderer.js')

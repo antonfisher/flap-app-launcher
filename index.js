@@ -10,10 +10,11 @@ let mainWindow
 function createWindow () {
   mainWindow = new BrowserWindow({
     // width: 500,
-    // height: 36,
+    // height: 50,
     width: 900,
     height: 500,
     frame: false,
+    //transparent: true,
     resizable: false,
     titleBarStyle: 'hidden',
     //skipTaskbar: true,
