@@ -7,6 +7,9 @@ function getApplicationsList () {
   }, {
     command: 'chrome-browser',
     path: '/opt/google/chrome/chrome'
+  }, {
+    command: 'chrome-browser-shmauzer',
+    path: '/opt/google/chrome/chrome'
   }]
 }
 
@@ -20,32 +23,25 @@ ipc.once('actionReply', function (response) {
 })
 ipc.send('invokeAction', 'kokoko');
 
-console.log('-- input', input, inputAutocomplete);
-
-const autocomplete = function (n = 0) {
-  console.log('-- n', n);
+const autocompleteGenerator = function* (list, value) {
   for (let i = 0; i < applicationsList.length; i++) {
     let {command} = applicationsList[i]
-    if (command.substring(0, input.value.length) == input.value) {
-      inputAutocomplete.value = command
-      if (n == 0) {
-        break
-      } else {
-        n--
-      }
+    if (command.substring(0, value.length) === value) {
+      yield command
     }
   }
 }
 
+let autocomplete = null
+
 input.addEventListener('keyup', (e) => {
-  console.log('-- UP', e.code);
   if (e.code !== 'Tab' && input.value.length > 0) {
-    autocomplete()
+    autocomplete = autocompleteGenerator(applicationsList, input.value)
+    inputAutocomplete.value = autocomplete.next().value
   }
 })
 
 input.addEventListener('keydown', (e) => {
-  console.log('-- code', e.code);
   if (e.code === 'Enter') {
     input.value = inputAutocomplete.value
   }
@@ -54,7 +50,13 @@ input.addEventListener('keydown', (e) => {
   }
 
   if (e.code === 'Tab') {
-    autocomplete(1)
+    const next = autocomplete.next()
+    if (next.done) {
+      autocomplete = autocompleteGenerator(applicationsList, input.value)
+      inputAutocomplete.value = autocomplete.next().value
+    } else {
+      inputAutocomplete.value = next.value
+    }
     e.preventDefault()
   } else {
     inputAutocomplete.value = ''
