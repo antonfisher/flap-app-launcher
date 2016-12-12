@@ -41,9 +41,9 @@ function createWindow () {
   //   // command output is in stdout
   // });
 
-  ipc.on('invokeAction', function (event, data) {
+  ipc.on('run-command', function (event, data) {
     console.log('-- ipc main', data);
-    event.sender.send('actionReply', 'ok');
+    event.sender.send('run-command-ok', true);
   })
 }
 

@@ -18,10 +18,10 @@ const applicationsList = getApplicationsList()
 const input = document.getElementById('input')
 const inputAutocomplete = document.getElementById('autocomplete')
 
-ipc.once('actionReply', function (response) {
-  console.log('-- ipc renderer', response);
+ipc.on('run-command-ok', function () {
+  input.value = ''
+  inputAutocomplete.value = ''
 })
-ipc.send('invokeAction', 'kokoko');
 
 const autocompleteGenerator = function* (list, value) {
   for (let i = 0; i < applicationsList.length; i++) {
@@ -37,19 +37,23 @@ let autocomplete = null
 input.addEventListener('keyup', (e) => {
   if (e.code !== 'Tab' && input.value.length > 0) {
     autocomplete = autocompleteGenerator(applicationsList, input.value)
-    inputAutocomplete.value = autocomplete.next().value
+    inputAutocomplete.value = (autocomplete.next().value || input.value)
   }
 })
 
+let lastCommand = ''
+
 input.addEventListener('keydown', (e) => {
   if (e.code === 'Enter') {
-    input.value = inputAutocomplete.value
-  }
-  if (e.code === 'Escape') {
+    if (input.value === inputAutocomplete.value && lastCommand === input.value) {
+      ipc.send('run-command', applicationsList.find(({command}) => (command === input.value)))
+    } else {
+      input.value = inputAutocomplete.value
+      lastCommand = input.value
+    }
+  } else if (e.code === 'Escape') {
     input.value = ''
-  }
-
-  if (e.code === 'Tab') {
+  } else if (e.code === 'Tab') {
     const next = autocomplete.next()
     if (next.done) {
       autocomplete = autocompleteGenerator(applicationsList, input.value)
