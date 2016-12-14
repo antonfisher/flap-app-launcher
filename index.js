@@ -17,8 +17,10 @@ function createWindow () {
     //transparent: true,
     resizable: false,
     titleBarStyle: 'hidden',
-    //skipTaskbar: true,
-    //show: false
+    skipTaskbar: true,
+    //show: false,
+    alwaysOnTop: true,
+    defaultFontFamily: 'monospace'
   })
 
   mainWindow.loadURL(url.format({
@@ -27,15 +29,19 @@ function createWindow () {
     slashes: true
   }))
 
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   mainWindow.on('close', () => {
     mainWindow = null
   })
 
   globalShortcut.register('Super+K', function () {
+    mainWindow.setSkipTaskbar(true)
+    mainWindow.setAlwaysOnTop(true)
     mainWindow.show()
+    mainWindow.focus()
   })
+
 
   // exec('chrome', function(error, stdout, stderr) {
   //   // command output is in stdout
