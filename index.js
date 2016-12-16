@@ -70,7 +70,13 @@ function createWindow () {
   })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+  exec('dpkg --get-selections | sed "s/.*deinstall//" | sed "s/install$//g"', (err, result) => {
+    const applicationsList = ((result || '').replace('\t', '').split('\n') || [])
+    global.applicationsList = applicationsList
+    createWindow(applicationsList)
+  })
+})
 
 app.on('will-quit', function () {
   globalShortcut.unregisterAll()

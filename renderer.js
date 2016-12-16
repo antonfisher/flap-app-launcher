@@ -1,19 +1,27 @@
+const remote = require('electron').remote
 const ipc = require('electron').ipcRenderer
 
 function getApplicationsList () {
-  return [{
-    command: 'chrome',
-    path: '/opt/google/chrome/chrome'
-  }, {
-    command: 'chrome-browser',
-    path: '/opt/google/chrome/chrome'
-  }, {
-    command: 'chrome-browser-shmauzer',
-    path: '/opt/google/chrome/chrome'
-  }, {
-    command: 'gnome-mines',
-    path: '/usr/games/gnome-mines'
-  }]
+  return remote.getGlobal('applicationsList').map((v) => {
+    return {
+      path: v,
+      command: v
+    }
+  });
+
+  // return [{
+  //   command: 'chrome',
+  //   path: '/opt/google/chrome/chrome'
+  // }, {
+  //   command: 'chrome-browser',
+  //   path: '/opt/google/chrome/chrome'
+  // }, {
+  //   command: 'chrome-browser-shmauzer',
+  //   path: '/opt/google/chrome/chrome'
+  // }, {
+  //   command: 'gnome-mines',
+  //   path: '/usr/games/gnome-mines'
+  // }]
 }
 
 const applicationsList = getApplicationsList()
