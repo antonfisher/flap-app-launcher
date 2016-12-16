@@ -42,7 +42,6 @@ function createWindow () {
     mainWindow.focus()
   })
 
-
   // exec('chrome', function(error, stdout, stderr) {
   //   // command output is in stdout
   // });
@@ -50,16 +49,23 @@ function createWindow () {
   ipc.on('run-command', function (event, data) {
     console.log('-- ipc main', data);
     const path = data.path
-    exec(path, function () {
-      console.log('-- done:', path);
+    const sendOk = (result) => {
+      event.sender.send('run-command-ok', result)
+      if (result) {
+        mainWindow.hide()
+      }
+    }
+
+    const sendOkTimeout = setTimeout(() => sendOk(true), 200)
+
+    exec(path, function (err) {
+      clearTimeout(sendOkTimeout)
+      sendOk(!err)
     })
-    event.sender.send('run-command-ok', true);
-    mainWindow.hide()
   })
 
   ipc.on('hide', function (event) {
-    console.log('-- ipc hide');
-    event.sender.send('hide-ok', true);
+    event.sender.send('hide-ok', true)
     mainWindow.hide()
   })
 }

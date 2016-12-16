@@ -21,9 +21,14 @@ const applicationsList = getApplicationsList()
 const input = document.getElementById('input')
 const inputAutocomplete = document.getElementById('autocomplete')
 
-ipc.on('run-command-ok', function () {
-  input.value = ''
-  inputAutocomplete.value = ''
+ipc.on('run-command-ok', function (e, result) {
+  if (result) {
+    input.value = ''
+    inputAutocomplete.value = ''
+  } else {
+    input.style.color = 'red'
+    setTimeout(() => input.style.color = 'inherit', 500)
+  }
 })
 
 const autocompleteGenerator = function* (list, value) {
@@ -41,11 +46,12 @@ input.addEventListener('keyup', (e) => {
   if (e.code !== 'Tab' && input.value) {
     autocomplete = autocompleteGenerator(applicationsList, input.value)
     inputAutocomplete.value = (autocomplete.next().value || input.value)
+  } else if (!input.value) {
+    inputAutocomplete.value = ''
   }
 })
 
 let lastKeyCode = ''
-let lastCommand = ''
 
 input.addEventListener('keydown', (e) => {
   const double = (lastKeyCode === e.code)
@@ -53,22 +59,17 @@ input.addEventListener('keydown', (e) => {
   lastKeyCode = e.code
 
   if (e.code === 'Escape') {
+    const hide = (!input.value || double)
     input.value = ''
     inputAutocomplete.value = ''
-    if (double) {
+    if (hide) {
       ipc.send('hide')
     }
-  } else if (!input.value) {
-    inputAutocomplete.value = ''
-    return
+    e.preventDefault()
   } else if (e.code === 'Enter') {
-    if (input.value === inputAutocomplete.value && lastCommand === input.value) {
-      const app = applicationsList.find(({command}) => (command === input.value))
-      ipc.send('run-command', app || {path: input.value})
-    } else {
-      input.value = inputAutocomplete.value
-      lastCommand = input.value
-    }
+    const app = applicationsList.find(({command}) => (command === inputAutocomplete.value))
+    ipc.send('run-command', app || {path: input.value})
+    e.preventDefault()
   } else if (e.code === 'Tab') {
     let next = autocomplete.next()
     if (next.done) {
@@ -77,14 +78,13 @@ input.addEventListener('keydown', (e) => {
     }
 
     if (next.value) {
-      input.value = next.value
       inputAutocomplete.value = next.value
     } else {
-      inputAutocomplete.value = input.value
+      inputAutocomplete.value = (input.value || '')
     }
 
     e.preventDefault()
-  } else {
-    inputAutocomplete.value = ''
+  } else if (e.code === 'ArrowRight') {
+    input.value = inputAutocomplete.value
   }
 })
