@@ -13,7 +13,7 @@
   "author": "Anton Fisher <a.fschr@gmail.com> (http://antonfisher.com)",
   "license": "MIT",
   "devDependencies": {
-    "electron": "1.4.12",
-    "electron-reload": "1.0.3"
+    "electron": "1.4.13",
+    "electron-reload": "1.1.0"
   }
 }

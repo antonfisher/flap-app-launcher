@@ -2,12 +2,7 @@ const remote = require('electron').remote
 const ipc = require('electron').ipcRenderer
 
 function getApplicationsList () {
-  return remote.getGlobal('applicationsList').map((v) => {
-    return {
-      path: v,
-      command: v
-    }
-  });
+  return remote.getGlobal('applicationsList');
 
   // return [{
   //   command: 'chrome',

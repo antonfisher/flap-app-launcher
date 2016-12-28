@@ -71,10 +71,26 @@ function createWindow () {
 }
 
 app.on('ready', () => {
+  const getPathCommandObject = (path) => {
+    return {
+      path,
+      command: path.split('/').pop()
+    }
+  }
+
   exec('dpkg --get-selections | sed "s/.*deinstall//" | sed "s/install$//g"', (err, result) => {
-    const applicationsList = ((result || '').replace('\t', '').split('\n') || [])
-    global.applicationsList = applicationsList
-    createWindow(applicationsList)
+    const installedApplications = ((result || '').replace(/\t/g, '').split('\n') || []).map(getPathCommandObject)
+
+    exec(
+      'grep -R "Exec=." /usr/share/applications/*.desktop | sed "s/^.*Exec=\\([^%$]\\+\\).*$/\\1/"',
+      (err, result) => {
+        const desktopApplications = ((result || '').replace(/\t/g, '').split('\n') || []).map(getPathCommandObject)
+
+        global.applicationsList = [... new Set([].concat(desktopApplications, installedApplications))]
+      }
+    )
+
+    createWindow()
   })
 })
 
