@@ -1,5 +1,5 @@
-const exec = require('child_process').exec
 const os = require('os')
+const exec = require('child_process').exec
 
 module.exports = function LinuxDriver () {
   return {
@@ -7,21 +7,25 @@ module.exports = function LinuxDriver () {
       return new Promise((resolve, reject) => {
         exec('dpkg --get-selections | sed "s/.*deinstall//" | sed "s/install$//g"', (err, result) => {
           if (err) {
-            reject(err)
+            return reject(err)
+          } else {
+            return resolve([]) // ignore installed applications
+            //return resolve((result || '').replace(/\t/g, '').split(os.EOL) || [])
           }
-          resolve((result || '').replace(/\t/g, '').split(os.EOL) || [])
         })
       })
         .then((applications) => {
-          applications = [] // ignore installed applications
           return new Promise((resolve, reject) => {
             exec(
               'grep -R "Exec=." /usr/share/applications/*.desktop | sed "s/^.*Exec=\\([^%$]\\+\\).*$/\\1/"',
               (err, result) => {
                 if (err) {
-                  reject(err)
+                  return reject(err)
+                } else {
+                  return resolve(
+                    applications.concat((result || '').replace(/\t/g, '').replace(/"/g, '').split(os.EOL) || [])
+                  )
                 }
-                resolve(applications.concat((result || '').replace(/\t/g, '').replace(/"/g, '').split(os.EOL) || []))
               }
             )
           })
