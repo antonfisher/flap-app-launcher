@@ -3,6 +3,8 @@ const path = require('path')
 const url = require('url')
 const exec = require('child_process').exec
 
+const LinuxDriver = require('./drivers/linux.js')
+
 require('electron-reload')(__dirname)
 
 let mainWindow
@@ -42,10 +44,6 @@ function createWindow () {
     mainWindow.focus()
   })
 
-  // exec('chrome', function(error, stdout, stderr) {
-  //   // command output is in stdout
-  // });
-
   ipc.on('run-command', function (event, data) {
     console.log('-- ipc main', data);
     const path = data.path
@@ -71,27 +69,19 @@ function createWindow () {
 }
 
 app.on('ready', () => {
-  const getPathCommandObject = (path) => {
-    return {
-      path,
-      command: path.split('/').pop()
-    }
-  }
+  const driver = new LinuxDriver()
 
-  exec('dpkg --get-selections | sed "s/.*deinstall//" | sed "s/install$//g"', (err, result) => {
-    const installedApplications = ((result || '').replace(/\t/g, '').split('\n') || []).map(getPathCommandObject)
-
-    exec(
-      'grep -R "Exec=." /usr/share/applications/*.desktop | sed "s/^.*Exec=\\([^%$]\\+\\).*$/\\1/"',
-      (err, result) => {
-        const desktopApplications = ((result || '').replace(/\t/g, '').split('\n') || []).map(getPathCommandObject)
-
-        global.applicationsList = [... new Set([].concat(desktopApplications, installedApplications))]
-      }
-    )
-
-    createWindow()
-  })
+  driver.getApplicationsList()
+    .then((applications) => {
+      global.applicationsList = applications
+      console.log('-- Total applications found:', global.applicationsList.length);
+    })
+    .then(() => {
+      createWindow()
+    })
+    .catch((err) => {
+      console.log('ERROR:', err);
+    })
 })
 
 app.on('will-quit', function () {
