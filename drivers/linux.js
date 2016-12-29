@@ -1,4 +1,5 @@
 const exec = require('child_process').exec
+const os = require('os')
 
 module.exports = function LinuxDriver () {
   return {
@@ -8,7 +9,7 @@ module.exports = function LinuxDriver () {
           if (err) {
             reject(err)
           }
-          resolve((result || '').replace(/\t/g, '').split('\n') || [])
+          resolve((result || '').replace(/\t/g, '').split(os.EOL) || [])
         })
       })
         .then((applications) => {
@@ -20,7 +21,7 @@ module.exports = function LinuxDriver () {
                 if (err) {
                   reject(err)
                 }
-                resolve(applications.concat((result || '').replace(/\t/g, '').replace(/"/g, '').split('\n') || []))
+                resolve(applications.concat((result || '').replace(/\t/g, '').replace(/"/g, '').split(os.EOL) || []))
               }
             )
           })

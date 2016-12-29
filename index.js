@@ -75,6 +75,7 @@ app.on('ready', () => {
     .then((applications) => {
       global.applicationsList = applications
       console.log('-- Total applications found:', global.applicationsList.length);
+      //console.dir(applications, {colors: true})
     })
     .then(() => {
       createWindow()
