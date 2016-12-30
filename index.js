@@ -1,7 +1,7 @@
 const {app, globalShortcut, ipcMain: ipc} = require('electron')
 
-const LinuxDriver = require('./drivers/linux.js')
-const createWindow = require('./window.js').createWindow
+const LinuxDriver = require('./src/drivers/linux.js')
+const createWindow = require('./src/window.js').createWindow
 
 require('electron-reload')(__dirname)
 
