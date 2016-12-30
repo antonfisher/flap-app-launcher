@@ -40,6 +40,15 @@ module.exports = function LinuxDriver () {
             }
           })
         )
+    },
+
+    runApplication(command, callback) {
+      const callbackTimeout = setTimeout(() => callback(true), 200)
+
+      exec(command.path, function (err) {
+        clearTimeout(callbackTimeout)
+        callback(!err)
+      })
     }
   }
 }

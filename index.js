@@ -1,91 +1,63 @@
-const {app, BrowserWindow, globalShortcut, ipcMain: ipc} = require('electron')
-const path = require('path')
-const url = require('url')
-const exec = require('child_process').exec
+const {app, globalShortcut, ipcMain: ipc} = require('electron')
 
 const LinuxDriver = require('./drivers/linux.js')
+const createWindow = require('./window.js').createWindow
 
 require('electron-reload')(__dirname)
 
-let mainWindow
+let wnd
+let driver
 
-function createWindow () {
-  mainWindow = new BrowserWindow({
-    width: 500,
-    height: 30,
-    // width: 900,
-    // height: 500,
-    frame: false,
-    //transparent: true,
-    resizable: false,
-    titleBarStyle: 'hidden',
-    skipTaskbar: true,
-    //show: false,
-    alwaysOnTop: true,
-    defaultFontFamily: 'monospace'
-  })
-
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
-
-  //mainWindow.webContents.openDevTools()
-
-  mainWindow.on('close', () => {
-    mainWindow = null
-  })
-
-  globalShortcut.register('Super+K', function () {
-    mainWindow.setSkipTaskbar(true)
-    mainWindow.setAlwaysOnTop(true)
-    mainWindow.show()
-    mainWindow.focus()
-  })
-
-  ipc.on('run-command', function (event, data) {
-    console.log('-- ipc main', data);
-    const path = data.path
-    const sendOk = (result) => {
-      event.sender.send('run-command-ok', result)
-      if (result) {
-        mainWindow.hide()
-      }
-    }
-
-    const sendOkTimeout = setTimeout(() => sendOk(true), 200)
-
-    exec(path, function (err) {
-      clearTimeout(sendOkTimeout)
-      sendOk(!err)
-    })
-  })
-
-  ipc.on('hide', function (event) {
-    event.sender.send('hide-ok', true)
-    mainWindow.hide()
-  })
+// 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
+if (process.platform === 'linux') {
+  driver = new LinuxDriver()
+} else {
+  console.log(`ERROR: platform ${process.platform} is not supported.\nPlease send request to a.fschr@gmail.com.`)
+  process.exit(1)
 }
 
 app.on('ready', () => {
-  const driver = new LinuxDriver()
-
   driver.getApplicationsList()
     .then((applications) => {
       global.applicationsList = applications
-      console.log('-- Total applications found:', global.applicationsList.length);
+      console.log('-- Total applications found:', global.applicationsList.length)
       //console.dir(applications, {colors: true})
     })
     .then(() => {
-      createWindow()
+      wnd = createWindow()
+    })
+    .then(() => {
+      globalShortcut.register('Super+K', () => {
+        wnd.setSkipTaskbar(true)
+        wnd.setAlwaysOnTop(true)
+        wnd.show()
+        wnd.focus()
+      })
+
+      ipc.on('hide', () => {
+        wnd.hide()
+      })
+
+      wnd.on('close', () => {
+        wnd = null
+      })
+
+      ipc.on('run-command', (event, command) => {
+        console.log('-- runApplication', command.path);
+        driver.runApplication(command, (result) => {
+          event.sender.send('run-command-ok', result)
+          if (result) {
+            wnd.hide()
+          }
+        })
+      })
     })
     .catch((err) => {
       console.log('ERROR:', err);
     })
 })
 
-app.on('will-quit', function () {
+app.on('will-quit', () => {
   globalShortcut.unregisterAll()
 })
 
@@ -96,7 +68,7 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
+  if (wnd === null) {
+    wnd = createWindow()
   }
 })
