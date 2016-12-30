@@ -7,16 +7,16 @@ function getApplicationsList () {
 
 const applicationsList = getApplicationsList()
 
-const input = document.getElementById('input')
-const inputAutocomplete = document.getElementById('autocomplete')
+const inputUser = document.getElementById('input-user')
+const inputAutocomplete = document.getElementById('input-autocomplete')
 
 ipc.on('run-command-ok', function (e, result) {
   if (result) {
-    input.value = ''
+    inputUser.value = ''
     inputAutocomplete.value = ''
   } else {
-    input.style.color = 'red'
-    setTimeout(() => input.style.color = 'inherit', 500)
+    inputUser.style.color = 'red'
+    setTimeout(() => inputUser.style.color = 'inherit', 500)
   }
 })
 
@@ -31,25 +31,25 @@ const autocompleteGenerator = function* (list, value) {
 
 let autocomplete = null
 
-input.addEventListener('keyup', (e) => {
-  if (e.code !== 'Tab' && input.value) {
-    autocomplete = autocompleteGenerator(applicationsList, input.value)
-    inputAutocomplete.value = (autocomplete.next().value || input.value)
-  } else if (!input.value) {
+inputUser.addEventListener('keyup', (e) => {
+  if (e.code !== 'Tab' && inputUser.value) {
+    autocomplete = autocompleteGenerator(applicationsList, inputUser.value)
+    inputAutocomplete.value = (autocomplete.next().value || inputUser.value)
+  } else if (!inputUser.value) {
     inputAutocomplete.value = ''
   }
 })
 
 let lastKeyCode = ''
 
-input.addEventListener('keydown', (e) => {
+inputUser.addEventListener('keydown', (e) => {
   const double = (lastKeyCode === e.code)
 
   lastKeyCode = e.code
 
   if (e.code === 'Escape') {
-    const hide = (!input.value || double)
-    input.value = ''
+    const hide = (!inputUser.value || double)
+    inputUser.value = ''
     inputAutocomplete.value = ''
     if (hide) {
       ipc.send('hide')
@@ -57,23 +57,23 @@ input.addEventListener('keydown', (e) => {
     e.preventDefault()
   } else if (e.code === 'Enter') {
     const app = applicationsList.find(({command}) => (command === inputAutocomplete.value))
-    ipc.send('run-command', app || {path: input.value})
+    ipc.send('run-command', app || {path: inputUser.value})
     e.preventDefault()
   } else if (e.code === 'Tab') {
     let next = autocomplete.next()
     if (next.done) {
-      autocomplete = autocompleteGenerator(applicationsList, input.value)
+      autocomplete = autocompleteGenerator(applicationsList, inputUser.value)
       next = autocomplete.next()
     }
 
     if (next.value) {
       inputAutocomplete.value = next.value
     } else {
-      inputAutocomplete.value = (input.value || '')
+      inputAutocomplete.value = (inputUser.value || '')
     }
 
     e.preventDefault()
   } else if (e.code === 'ArrowRight') {
-    input.value = inputAutocomplete.value
+    inputUser.value = inputAutocomplete.value
   }
 })
