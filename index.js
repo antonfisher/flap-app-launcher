@@ -2,6 +2,7 @@ const {app, globalShortcut, ipcMain: ipc} = require('electron')
 
 const LinuxDriver = require('./src/drivers/linux.js')
 const createWindow = require('./src/window.js').createWindow
+const ipcCommands = require('./src/ipcCommands.js')
 
 require('electron-reload')(__dirname)
 
@@ -34,7 +35,7 @@ app.on('ready', () => {
         wnd.focus()
       })
 
-      ipc.on('hide', () => {
+      ipc.on(ipcCommands.HIDE, () => {
         wnd.hide()
       })
 
@@ -42,10 +43,10 @@ app.on('ready', () => {
         wnd = null
       })
 
-      ipc.on('run-command', (event, command) => {
+      ipc.on(ipcCommands.RUN_COMMAND, (event, command) => {
         console.log('-- runApplication', command.path);
         driver.runApplication(command, (result) => {
-          event.sender.send('run-command-ok', result)
+          event.sender.send(ipcCommands.RUN_COMMAND_OK, result)
           if (result) {
             wnd.hide()
           }

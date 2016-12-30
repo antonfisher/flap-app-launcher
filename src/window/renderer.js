@@ -1,5 +1,6 @@
 const remote = require('electron').remote
 const ipc = require('electron').ipcRenderer
+const ipcCommands = require('../ipcCommands.js')
 
 function getApplicationsList () {
   return remote.getGlobal('applicationsList');
@@ -10,7 +11,7 @@ const applicationsList = getApplicationsList()
 const inputUser = document.getElementById('input-user')
 const inputAutocomplete = document.getElementById('input-autocomplete')
 
-ipc.on('run-command-ok', function (e, result) {
+ipc.on(ipcCommands.RUN_COMMAND_OK, function (e, result) {
   if (result) {
     inputUser.value = ''
     inputAutocomplete.value = ''
@@ -52,12 +53,12 @@ inputUser.addEventListener('keydown', (e) => {
     inputUser.value = ''
     inputAutocomplete.value = ''
     if (hide) {
-      ipc.send('hide')
+      ipc.send(ipcCommands.HIDE)
     }
     e.preventDefault()
   } else if (e.code === 'Enter') {
     const app = applicationsList.find(({command}) => (command === inputAutocomplete.value))
-    ipc.send('run-command', app || {path: inputUser.value})
+    ipc.send(ipcCommands.RUN_COMMAND, app || {path: inputUser.value})
     e.preventDefault()
   } else if (e.code === 'Tab') {
     let next = autocomplete.next()
