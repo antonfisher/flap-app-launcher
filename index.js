@@ -28,7 +28,7 @@ app.on('ready', () => {
       wnd = createWindow()
     })
     .then(() => {
-      globalShortcut.register('Super+K', () => {
+      globalShortcut.register('Super+Space', () => {
         wnd.setSkipTaskbar(true)
         wnd.setAlwaysOnTop(true)
         wnd.show()
@@ -54,7 +54,7 @@ app.on('ready', () => {
       })
     })
     .catch((err) => {
-      console.log('ERROR:', err);
+      console.log('ERROR:', err)
     })
 })
 

@@ -7,8 +7,6 @@ module.exports = {
     let wnd = new BrowserWindow({
       width: 500,
       height: 30,
-      // width: 900,
-      // height: 500,
       frame: false,
       //transparent: true,
       resizable: false,
