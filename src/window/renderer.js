@@ -36,8 +36,6 @@ inputUser.addEventListener('keyup', (e) => {
   if (e.code !== 'Tab' && inputUser.value) {
     autocomplete = autocompleteGenerator(applicationsList, inputUser.value)
     inputAutocomplete.value = (autocomplete.next().value || inputUser.value)
-  } else if (!inputUser.value) {
-    inputAutocomplete.value = ''
   }
 })
 
@@ -76,5 +74,7 @@ inputUser.addEventListener('keydown', (e) => {
     e.preventDefault()
   } else if (e.code === 'ArrowRight') {
     inputUser.value = inputAutocomplete.value
+  } else {
+    inputAutocomplete.value = ''
   }
 })
