@@ -3,11 +3,10 @@ const ipc = require('electron').ipcRenderer
 const ipcCommands = require('../ipcCommands.js')
 
 function getApplicationsList () {
-  return remote.getGlobal('applicationsList');
+  return remote.getGlobal('applicationsList')
 }
 
 const applicationsList = getApplicationsList()
-
 const inputUser = document.getElementById('input-user')
 const inputAutocomplete = document.getElementById('input-autocomplete')
 
@@ -16,6 +15,7 @@ ipc.on(ipcCommands.RUN_COMMAND_OK, function (e, result) {
     inputUser.value = ''
     inputAutocomplete.value = ''
   } else {
+    //TODO: use styles
     inputUser.style.color = 'red'
     setTimeout(() => inputUser.style.color = 'inherit', 500)
   }

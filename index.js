@@ -21,8 +21,7 @@ app.on('ready', () => {
   driver.getApplicationsList()
     .then((applications) => {
       global.applicationsList = applications
-      console.log('-- Total applications found:', global.applicationsList.length)
-      //console.dir(applications, {colors: true})
+      console.log('Total applications found:', global.applicationsList.length)
     })
     .then(() => {
       wnd = createWindow()
