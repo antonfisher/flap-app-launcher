@@ -22,6 +22,7 @@ app.on('ready', () => {
     .then((applications) => {
       global.applicationsList = applications
       console.log('Total applications found:', global.applicationsList.length)
+      //applications.forEach((a) => {console.log('-- app:', a.path + ' >>> ' + a.command)})
     })
     .then(() => {
       wnd = createWindow()

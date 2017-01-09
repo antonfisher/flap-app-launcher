@@ -38,10 +38,14 @@ module.exports = function LinuxDriver () {
         ))
         .then((applications) => [... new Set(applications)])
         .then((applications) => (
-          applications.map((path) => ({
-            path,
-            command: path.split('/').pop()
-          }))
+          applications.map((path) => {
+            const pathArr = path.split(' ')
+            pathArr[0] = pathArr[0].split('/').pop()
+            return {
+              path,
+              command: pathArr.join(' ')
+            }
+          })
         ))
     },
 

@@ -13,6 +13,7 @@ const inputAutocomplete = document.getElementById('input-autocomplete')
 ipc.on(ipcCommands.RUN_COMMAND_OK, function (e, result) {
   if (result) {
     inputUser.value = ''
+    inputUser.style.color = 'inherit'
     inputAutocomplete.value = ''
   } else {
     //TODO: use styles
@@ -35,7 +36,7 @@ let autocomplete = null
 inputUser.addEventListener('keyup', (e) => {
   if (e.code !== 'Tab' && inputUser.value) {
     autocomplete = autocompleteGenerator(applicationsList, inputUser.value)
-    inputAutocomplete.value = (autocomplete.next().value || inputUser.value)
+    inputAutocomplete.value = (autocomplete.next().value || '')
   }
 })
 
@@ -55,6 +56,8 @@ inputUser.addEventListener('keydown', (e) => {
     }
     e.preventDefault()
   } else if (e.code === 'Enter') {
+    //TODO: use styles
+    inputUser.style.color = 'yellow'
     const app = applicationsList.find(({command}) => (command === inputAutocomplete.value))
     ipc.send(ipcCommands.RUN_COMMAND, app || {path: inputUser.value})
     e.preventDefault()
