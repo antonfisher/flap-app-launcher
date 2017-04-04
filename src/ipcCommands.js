@@ -2,4 +2,4 @@ module.exports = {
   HIDE: 'HIDE',
   RUN_COMMAND: 'RUN_COMMAND',
   RUN_COMMAND_OK: 'RUN_COMMAND_OK'
-}
+};

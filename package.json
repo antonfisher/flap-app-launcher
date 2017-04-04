@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/.bin/electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- ."
   },
   "keywords": [
     "launcher"
@@ -13,7 +14,8 @@
   "author": "Anton Fisher <a.fschr@gmail.com> (http://antonfisher.com)",
   "license": "MIT",
   "devDependencies": {
-    "electron": "1.4.13",
-    "electron-reload": "1.1.0"
+    "electron": "1.6.2",
+    "electron-reload": "1.1.0",
+    "eslint": "3.19.0"
   }
 }
