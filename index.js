@@ -6,6 +6,8 @@ const ipcCommands = require('./src/ipcCommands.js');
 
 require('electron-reload')(__dirname);
 
+const DEFAULT_START_HOTKEYS = 'Super+k';
+
 let wnd;
 let driver;
 
@@ -28,7 +30,7 @@ app.on('ready', () => {
       wnd = createWindow();
     })
     .then(() => {
-      globalShortcut.register('Super+Space', () => {
+      globalShortcut.register(DEFAULT_START_HOTKEYS, () => {
         wnd.setSkipTaskbar(true);
         wnd.setAlwaysOnTop(true);
         wnd.show();
@@ -36,6 +38,10 @@ app.on('ready', () => {
       });
 
       ipc.on(ipcCommands.HIDE, () => {
+        wnd.hide();
+      });
+
+      wnd.on('blur', () => {
         wnd.hide();
       });
 

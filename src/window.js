@@ -14,7 +14,7 @@ module.exports = {
       skipTaskbar: true,
       //show: false,
       alwaysOnTop: true,
-      defaultFontFamily: 'monospace'
+      defaultFontFamily: 'monospace, "Ubuntu Mono", "Courier New"'
     });
 
     wnd.loadURL(url.format({
@@ -23,7 +23,7 @@ module.exports = {
       slashes: true
     }));
 
-    //wnd.webContents.openDevTools()
+    //wnd.webContents.openDevTools();
 
     return wnd;
   }
