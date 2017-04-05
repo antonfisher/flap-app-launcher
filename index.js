@@ -4,6 +4,9 @@ const {app, globalShortcut, ipcMain: ipc} = electron;
 const LinuxDriver = require('./src/drivers/linux.js');
 const {createWindow} = require('./src/window.js');
 const ipcCommands = require('./src/ipcCommands.js');
+const logger = require('./src/logger.js');
+
+logger.info('Start application');
 
 require('electron-reload')(__dirname);
 
@@ -51,8 +54,12 @@ app.on('ready', () => {
       });
 
       ipc.on(ipcCommands.RUN_COMMAND, (event, command) => {
-        console.log('-- runApplication', command.path);
+        if (!command) {
+          return;
+        }
+        logger.info('Run command:', command.path);
         driver.runApplication(command, (result) => {
+          logger.info('`- result for:', command.path, '-', result);
           event.sender.send(ipcCommands.RUN_COMMAND_OK, result);
           if (result) {
             wnd.hide();
@@ -61,7 +68,7 @@ app.on('ready', () => {
       });
     })
     .catch((err) => {
-      console.log('ERROR:', err);
+      logger.info('Error:', err);
     });
 });
 

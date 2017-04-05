@@ -48,11 +48,17 @@ module.exports = function LinuxDriver() {
     },
 
     runApplication(command, callback) {
-      const callbackTimeout = setTimeout(() => callback(true), 200);
+      let done = false;
+      const callbackTimeout = setTimeout(() => {
+        done = true;
+        callback(true);
+      }, 1000);
 
-      exec(command.path, function (err) {
-        clearTimeout(callbackTimeout);
-        callback(!err);
+      exec(command.path, (err) => {
+        if (!done) {
+          clearTimeout(callbackTimeout);
+          callback(!err);
+        }
       });
     }
   }
