@@ -1,12 +1,13 @@
-const {app, globalShortcut, ipcMain: ipc} = require('electron');
+const electron = require('electron')
+const {app, globalShortcut, ipcMain: ipc} = electron;
 
 const LinuxDriver = require('./src/drivers/linux.js');
-const createWindow = require('./src/window.js').createWindow;
+const {createWindow} = require('./src/window.js');
 const ipcCommands = require('./src/ipcCommands.js');
 
 require('electron-reload')(__dirname);
 
-const DEFAULT_START_HOTKEYS = 'Super+k';
+const DEFAULT_START_HOTKEYS = 'Super+Space';
 
 let wnd;
 let driver;
