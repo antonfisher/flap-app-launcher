@@ -2,11 +2,11 @@ const remote = require('electron').remote;
 const ipc = require('electron').ipcRenderer;
 const ipcCommands = require('../ipcCommands.js');
 
-function getApplicationsList() {
-  return remote.getGlobal('applicationsList');
+function getApplicationList() {
+  return remote.getGlobal('applicationList');
 }
 
-const applicationsList = getApplicationsList();
+const applicationList = getApplicationList();
 const inputUser = document.getElementById('input-user');
 const inputAutocomplete = document.getElementById('input-autocomplete');
 
@@ -23,8 +23,8 @@ ipc.on(ipcCommands.RUN_COMMAND_OK, function (e, result) {
 });
 
 const autocompleteGenerator = function*(list, value) {
-  for (let i = 0; i < applicationsList.length; i++) {
-    let {command} = applicationsList[i];
+  for (let i = 0; i < applicationList.length; i++) {
+    let {command} = applicationList[i];
     //if (command.substring(0, value.length) === value) {
     if (command.includes(value)) {
       yield command;
@@ -66,13 +66,13 @@ inputUser.addEventListener('keydown', (e) => {
   } else if (e.code === 'Enter') {
     //TODO: use styles
     inputUser.style.color = 'yellow';
-    const app = applicationsList.find(({command}) => (command === inputAutocomplete.value));
+    const app = applicationList.find(({command}) => (command === inputAutocomplete.value));
     ipc.send(ipcCommands.RUN_COMMAND, app || {path: value});
     e.preventDefault();
   } else if (e.code === 'Tab') {
     let next = autocomplete.next();
     if (next.done) {
-      autocomplete = autocompleteGenerator(applicationsList, value);
+      autocomplete = autocompleteGenerator(applicationList, value);
       next = autocomplete.next();
     }
 
@@ -93,7 +93,7 @@ inputUser.addEventListener('keydown', (e) => {
 inputUser.addEventListener('keyup', (e) => {
   const value = removeLeftPad(inputUser.value);
   if (e.code !== 'Tab' && value) {
-    autocomplete = autocompleteGenerator(applicationsList, value);
+    autocomplete = autocompleteGenerator(applicationList, value);
     inputAutocomplete.value = (autocomplete.next().value || '');
   }
   inputUser.value = addLeftPad(inputAutocomplete.value, value);

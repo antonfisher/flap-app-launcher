@@ -5,6 +5,7 @@ const LinuxDriver = require('./src/drivers/linux.js');
 const {createWindow} = require('./src/window.js');
 const ipcCommands = require('./src/ipcCommands.js');
 const logger = require('./src/logger.js');
+const statistics = require('./src/statistics.js');
 
 logger.info('Start application');
 
@@ -24,10 +25,10 @@ if (process.platform === 'linux') {
 }
 
 app.on('ready', () => {
-  driver.getApplicationsList()
+  driver.getApplicationList()
     .then((applications) => {
-      global.applicationsList = applications;
-      console.log('Total applications found:', global.applicationsList.length);
+      global.applicationList = statistics.sortCommands(applications);
+      console.log('Total applications found:', global.applicationList.length);
       //applications.forEach((a) => {console.log('-- app:', a.path + ' >>> ' + a.command)});
     })
     .then(() => {
@@ -61,6 +62,7 @@ app.on('ready', () => {
         driver.runApplication(command, (result) => {
           logger.info('`- result for:', command.path, '-', result);
           event.sender.send(ipcCommands.RUN_COMMAND_OK, result);
+          statistics.addStatRecord(command.path);
           if (result) {
             wnd.hide();
           }

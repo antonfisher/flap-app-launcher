@@ -1,7 +1,9 @@
 # Logs
-logs
-*.log
 npm-debug.log*
 
 # Dependency directories
 node_modules
+
+# Application files
+flap-app-launcher.log
+flap-app-launcher.stats

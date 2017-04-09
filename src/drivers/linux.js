@@ -3,7 +3,7 @@ const exec = require('child_process').exec;
 
 module.exports = function LinuxDriver() {
   return {
-    getApplicationsList () {
+    getApplicationList () {
       return new Promise((resolve, reject) => {
         return resolve([]); // ignore installed applications
         // exec('dpkg --get-selections | sed "s/.*deinstall//" | sed "s/install$//g"', (err, result) => {
