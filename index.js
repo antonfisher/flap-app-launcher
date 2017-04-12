@@ -8,6 +8,7 @@ const statistics = require('./src/statistics.js');
 require('electron-reload')(__dirname);
 
 logger.info('Start application');
+statistics.loadStats();
 
 const {app, globalShortcut, ipcMain: ipc} = electron;
 const DEFAULT_START_HOTKEYS = 'Super+Space';

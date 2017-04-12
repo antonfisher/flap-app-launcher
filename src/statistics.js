@@ -9,7 +9,10 @@ let cachedStats = null;
 
 function loadStats(callback) {
   if (cachedStats) {
-    return callback(cachedStats);
+    if (callback) {
+      return callback(cachedStats);
+    }
+    return null;
   }
   return fs.readFile(STATISTICS_FILE_PATH, (err, data) => {
     if (err) {
@@ -22,7 +25,9 @@ function loadStats(callback) {
         cachedStats = {};
       }
     }
-    callback(cachedStats);
+    if (callback) {
+      callback(cachedStats);
+    }
   });
 }
 
@@ -44,15 +49,14 @@ function addStatRecord(commandPath) {
 }
 
 function sortCommands(commands) {
-  return commands.sort();
-  // return commands.sort((a, b) => {
-  //   const aRunCount = cachedStats[a.path];
-  //   const bRunCount = cachedStats[b.path];
-  //   if (aRunCount || bRunCount) {
-  //     return (aRunCount || 0) > (bRunCount || 0);
-  //   }
-  //   return a.path > b.path;
-  // });
+  return commands.sort((a, b) => {
+    const aRunCount = cachedStats[a.path];
+    const bRunCount = cachedStats[b.path];
+    if (aRunCount || bRunCount) {
+      return ((bRunCount || 0) - (aRunCount || 0));
+    }
+    return a.path > b.path;
+  });
 }
 
 module.exports = {

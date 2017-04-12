@@ -1,13 +1,22 @@
 # Flap-App-Launcher
 
-This is an application launcher for Ubuntu.
+This is an applications launcher for Ubuntu.
 
 ![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/screenshot-v1.png)
 
+## Features:
 - minimalistic design
-- indexing main menu applications
-- suggestions on TAB
+- indexing the main menu applications
+- suggestions on TAB button
+- suggestions respect usage statistic
+- run command in the terminal if not found in the index
 
 Start: `npm start`
 
 HotKey: `Super+Space`
+
+## ToDo:
+- [ ] tests
+- [ ] configuration file
+- [ ] configuration window
+- [ ] driver for iOS/Win?
