@@ -10,15 +10,15 @@ const applicationList = getApplicationList();
 const inputUser = document.getElementById('input-user');
 const inputAutocomplete = document.getElementById('input-autocomplete');
 
-ipc.on(ipcCommands.RUN_COMMAND_OK, function (e, result) {
-  if (result) {
+ipc.on(ipcCommands.RUN_COMMAND_DONE, function (e, success) {
+  if (success) {
     inputUser.value = '';
-    inputUser.style.color = 'inherit';
+    inputUser.style.color = 'inherit'
     inputAutocomplete.value = '';
   } else {
     //TODO: use styles
     inputUser.style.color = 'red';
-    setTimeout(() => inputUser.style.color = 'inherit', 500);
+    setTimeout(() => inputUser.style.color = 'inherit', 1000);
   }
 });
 
@@ -63,11 +63,11 @@ inputUser.addEventListener('keydown', (e) => {
       ipc.send(ipcCommands.HIDE);
     }
     e.preventDefault();
-  } else if (e.code === 'Enter') {
+  } else if (e.code === 'Enter' && value) {
     //TODO: use styles
     inputUser.style.color = 'yellow';
-    const app = applicationList.find(({command}) => (command === inputAutocomplete.value));
-    ipc.send(ipcCommands.RUN_COMMAND, app || {path: value});
+    const command = applicationList.find(({command}) => (command === inputAutocomplete.value));
+    ipc.send(ipcCommands.RUN_COMMAND, command || {rawPath: value});
     e.preventDefault();
   } else if (e.code === 'Tab') {
     let next = autocomplete.next();

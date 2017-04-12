@@ -55,17 +55,15 @@ app.on('ready', () => {
       });
 
       ipc.on(ipcCommands.RUN_COMMAND, (event, command) => {
-        if (!command) {
-          return;
-        }
-        logger.info('Run command:', command.path);
+        logger.info('Run command:', command.path || command.rawPath);
         driver.runApplication(command, (result) => {
-          logger.info('`- result for:', command.path, '-', result);
-          event.sender.send(ipcCommands.RUN_COMMAND_OK, result);
-          statistics.addStatRecord(command.path);
+          logger.info('`- result for:', command.path || command.rawPath, '-', result)
           if (result) {
             wnd.hide();
+          } else {
+            event.sender.send(ipcCommands.RUN_COMMAND_DONE, result);
           }
+          statistics.addStatRecord(command.path || command.rawPath);
         });
       });
     })

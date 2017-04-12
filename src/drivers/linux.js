@@ -52,9 +52,16 @@ module.exports = function LinuxDriver() {
       const callbackTimeout = setTimeout(() => {
         done = true;
         callback(true);
-      }, 1000);
+      }, 250);
 
-      exec(command.path, (err) => {
+      let execString = null;
+      if (command.path) {
+        execString = `${command.path} &`;
+      } else if (command.rawPath) {
+        execString = `x-terminal-emulator -e 'sh -c "${command.rawPath};bash"' &`;
+      }
+
+      exec(execString, (err) => {
         if (!done) {
           clearTimeout(callbackTimeout);
           callback(!err);
