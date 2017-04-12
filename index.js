@@ -1,16 +1,15 @@
-const electron = require('electron')
-const {app, globalShortcut, ipcMain: ipc} = electron;
-
+const electron = require('electron');
 const LinuxDriver = require('./src/drivers/linux.js');
 const {createWindow} = require('./src/window.js');
 const ipcCommands = require('./src/ipcCommands.js');
 const logger = require('./src/logger.js');
 const statistics = require('./src/statistics.js');
 
-logger.info('Start application');
-
 require('electron-reload')(__dirname);
 
+logger.info('Start application');
+
+const {app, globalShortcut, ipcMain: ipc} = electron;
 const DEFAULT_START_HOTKEYS = 'Super+Space';
 
 let wnd;
@@ -20,7 +19,7 @@ let driver;
 if (process.platform === 'linux') {
   driver = new LinuxDriver();
 } else {
-  console.log(`ERROR: platform ${process.platform} is not supported.\nPlease send request to a.fschr@gmail.com.`);
+  logger.info(`ERROR: platform ${process.platform} is not supported.\nPlease send request to a.fschr@gmail.com.`);
   process.exit(1);
 }
 
@@ -28,8 +27,7 @@ app.on('ready', () => {
   driver.getApplicationList()
     .then((applications) => {
       global.applicationList = statistics.sortCommands(applications);
-      console.log('Total applications found:', global.applicationList.length);
-      //applications.forEach((a) => {console.log('-- app:', a.path + ' >>> ' + a.command)});
+      logger.info('Total applications found:', global.applicationList.length);
     })
     .then(() => {
       wnd = createWindow();
@@ -57,7 +55,7 @@ app.on('ready', () => {
       ipc.on(ipcCommands.RUN_COMMAND, (event, command) => {
         logger.info('Run command:', command.path || command.rawPath);
         driver.runApplication(command, (result) => {
-          logger.info('`- result for:', command.path || command.rawPath, '-', result)
+          logger.info('`- result for:', command.path || command.rawPath, '-', result);
           if (result) {
             wnd.hide();
           } else {

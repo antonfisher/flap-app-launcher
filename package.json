@@ -13,10 +13,14 @@
   ],
   "author": "Anton Fisher <a.fschr@gmail.com> (http://antonfisher.com)",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "electron": "1.6.2",
     "electron-reload": "1.1.0",
-    "eslint": "3.19.0",
     "winston": "2.3.1"
+  },
+  "devDependencies": {
+    "eslint": "3.19.0",
+    "eslint-config-airbnb-base": "11.1.3",
+    "eslint-plugin-import": "2.2.0"
   }
 }

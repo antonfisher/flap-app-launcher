@@ -7,45 +7,52 @@ const STATISTICS_FILE_PATH = path.join(__dirname, '..', STATISTICS_FILE_NAME);
 
 let cachedStats = null;
 
-const loadStats = function (callback) {
+function loadStats(callback) {
   if (cachedStats) {
     return callback(cachedStats);
-  } else {
-    fs.readFile(STATISTICS_FILE_PATH, (err, data) => {
-      if (err) {
-        cachedStats = {};
-      } else {
-        try {
-          cachedStats = JSON.parse(data);
-        } catch (e) {
-          logger.warn(`Cannot read statistics file: ${e}`);
-          cachedStats = {};
-        }
-      }
-      callback(cachedStats);
-    });
   }
-};
+  return fs.readFile(STATISTICS_FILE_PATH, (err, data) => {
+    if (err) {
+      cachedStats = {};
+    } else {
+      try {
+        cachedStats = JSON.parse(data);
+      } catch (e) {
+        logger.warn(`Cannot read statistics file: ${e}`);
+        cachedStats = {};
+      }
+    }
+    callback(cachedStats);
+  });
+}
 
-const saveStats = function (data) {
-  fs.writeFile(STATISTICS_FILE_PATH, JSON.stringify(data), {flag: 'w'}, (err) => {
+function saveStats(data) {
+  return fs.writeFile(STATISTICS_FILE_PATH, JSON.stringify(data), {flag: 'w'}, (err) => {
     if (err) {
       logger.error(`Cannot write statistics file: ${err}`);
     }
     cachedStats = data;
   });
-};
+}
 
-const addStatRecord = function (path) {
-  loadStats((stats) => {
-    stats[path] = stats[path] || 0;
-    stats[path]++;
+function addStatRecord(commandPath) {
+  return loadStats((stats) => {
+    stats[commandPath] = stats[commandPath] || 0;
+    stats[commandPath]++;
     saveStats(stats);
   });
-};
+}
 
-const sortCommands = function (commands) {
+function sortCommands(commands) {
   return commands.sort();
+  // return commands.sort((a, b) => {
+  //   const aRunCount = cachedStats[a.path];
+  //   const bRunCount = cachedStats[b.path];
+  //   if (aRunCount || bRunCount) {
+  //     return (aRunCount || 0) > (bRunCount || 0);
+  //   }
+  //   return a.path > b.path;
+  // });
 }
 
 module.exports = {

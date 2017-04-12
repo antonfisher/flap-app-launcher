@@ -1,8 +1,8 @@
 const url = require('url');
 const path = require('path');
 const electron = require('electron');
-const {BrowserWindow} = electron;
 
+const {BrowserWindow} = electron;
 const WINDOW_WIDTH = 500;
 const WINDOW_HEIGHT = 30;
 
@@ -26,7 +26,7 @@ module.exports = {
       resizable: false,
       titleBarStyle: 'hidden',
       skipTaskbar: true,
-      //show: false,
+      // show: false,
       alwaysOnTop: true,
       defaultFontFamily: 'monospace, "Ubuntu Mono", "Courier New"'
     });
@@ -37,8 +37,8 @@ module.exports = {
       slashes: true
     }));
 
-    //wnd.webContents.openDevTools();
+    // wnd.webContents.openDevTools();
 
     return wnd;
   }
-}
+};
