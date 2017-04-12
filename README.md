@@ -11,6 +11,7 @@ This is an applications launcher for Ubuntu.
 - suggestions respect usage statistic
 - run command in the terminal if not found in the index
 
+## Usage:
 Start: `npm start`
 
 HotKey: `Super+Space`
