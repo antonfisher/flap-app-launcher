@@ -1,6 +1,9 @@
 # Flap-App-Launcher
 
-[![Build Status](https://travis-ci.org/antonfisher/flap-app-launcher.svg?branch=master)](https://travis-ci.org/antonfisher/flap-app-launcher)
+![Build Status](https://travis-ci.org/antonfisher/flap-app-launcher.svg?branch=master)
+![Dependency Status](https://dependencyci.com/github/antonfisher/flap-app-launcher/badge)
+![bitHound Overall Score](https://www.bithound.io/github/antonfisher/flap-app-launcher/badges/score.svg)
+![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)
 
 This is an applications launcher for Ubuntu.
 
