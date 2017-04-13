@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "es6": true,
-    "node": true
+    "node": true,
+    "mocha": true
   },
   "extends": "airbnb-base",
   "plugins": [
@@ -15,6 +16,7 @@
     "block-spacing": 0,
     "spaced-comment": 0,
     "no-param-reassign": 0,
+    "no-underscore-dangle": 0,
     "object-curly-spacing": 0,
     "max-len": [
       "error",

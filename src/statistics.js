@@ -5,9 +5,18 @@ const logger = require('./logger.js');
 const STATISTICS_FILE_NAME = 'flap-app-launcher.stats';
 const STATISTICS_FILE_PATH = path.join(__dirname, '..', STATISTICS_FILE_NAME);
 
-let cachedStats = null;
+let _cachedStats = null;
+
+function setCachedStats(data) {
+  _cachedStats = data;
+}
+
+function getCachedStats() {
+  return _cachedStats;
+}
 
 function loadStats(callback) {
+  const cachedStats = getCachedStats();
   if (cachedStats) {
     if (callback) {
       return callback(cachedStats);
@@ -16,17 +25,17 @@ function loadStats(callback) {
   }
   return fs.readFile(STATISTICS_FILE_PATH, (err, data) => {
     if (err) {
-      cachedStats = {};
+      setCachedStats({});
     } else {
       try {
-        cachedStats = JSON.parse(data);
+        setCachedStats(JSON.parse(data));
       } catch (e) {
         logger.warn(`Cannot read statistics file: ${e}`);
-        cachedStats = {};
+        setCachedStats({});
       }
     }
     if (callback) {
-      callback(cachedStats);
+      callback(getCachedStats());
     }
   });
 }
@@ -36,11 +45,11 @@ function saveStats(data) {
     if (err) {
       logger.error(`Cannot write statistics file: ${err}`);
     }
-    cachedStats = data;
+    setCachedStats(data);
   });
 }
 
-function addStatRecord(commandPath) {
+function addRecord(commandPath) {
   return loadStats((stats) => {
     stats[commandPath] = stats[commandPath] || 0;
     stats[commandPath]++;
@@ -50,10 +59,13 @@ function addStatRecord(commandPath) {
 
 function sortCommands(commands) {
   return commands.sort((a, b) => {
-    const aRunCount = cachedStats[a.path];
-    const bRunCount = cachedStats[b.path];
-    if (aRunCount || bRunCount) {
-      return ((bRunCount || 0) - (aRunCount || 0));
+    const cachedStats = getCachedStats();
+    if (cachedStats) {
+      const aRunCount = cachedStats[a.path];
+      const bRunCount = cachedStats[b.path];
+      if (aRunCount || bRunCount) {
+        return ((bRunCount || 0) - (aRunCount || 0));
+      }
     }
     return a.path > b.path;
   });
@@ -61,6 +73,8 @@ function sortCommands(commands) {
 
 module.exports = {
   loadStats,
-  addStatRecord,
+  addRecord,
+  getCachedStats,
+  setCachedStats,
   sortCommands
 };

@@ -7,14 +7,17 @@ const statistics = require('./src/statistics.js');
 
 require('electron-reload')(__dirname);
 
-logger.info('Start application');
-statistics.loadStats();
-
 const {app, globalShortcut, ipcMain: ipc} = electron;
 const DEFAULT_START_HOTKEYS = 'Super+Space';
 
 let wnd;
 let driver;
+
+logger.info('Start application');
+logger.info(`HotKey binding: ${DEFAULT_START_HOTKEYS}`);
+
+// preload stats to cache
+statistics.loadStats();
 
 // 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
 if (process.platform === 'linux') {
@@ -28,7 +31,7 @@ app.on('ready', () => {
   driver.getApplicationList()
     .then((applications) => {
       global.applicationList = statistics.sortCommands(applications);
-      logger.info('Total applications found:', global.applicationList.length);
+      logger.info(`Total applications found: ${global.applicationList.length}`);
     })
     .then(() => {
       wnd = createWindow();
@@ -54,20 +57,20 @@ app.on('ready', () => {
       });
 
       ipc.on(ipcCommands.RUN_COMMAND, (event, command) => {
-        logger.info('Run command:', command.path || command.rawPath);
+        logger.info(`Run command: "${command.path || command.rawPath}"`);
         driver.runApplication(command, (result) => {
-          logger.info('`- result for:', command.path || command.rawPath, '-', result);
+          logger.info(`     result: "${command.path || command.rawPath}" is ${result ? 'OK' : 'FAIL'}`);
           if (result) {
             wnd.hide();
           } else {
             event.sender.send(ipcCommands.RUN_COMMAND_DONE, result);
           }
-          statistics.addStatRecord(command.path || command.rawPath);
+          statistics.addRecord(command.path || command.rawPath);
         });
       });
     })
     .catch((err) => {
-      logger.info('Error:', err);
+      logger.info(`Error: ${err}`);
     });
 });
 

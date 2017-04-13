@@ -37,7 +37,7 @@ module.exports = {
       slashes: true
     }));
 
-    // wnd.webContents.openDevTools();
+    //wnd.webContents.openDevTools();
 
     return wnd;
   }

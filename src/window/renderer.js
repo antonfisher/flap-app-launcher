@@ -1,6 +1,7 @@
 const remote = require('electron').remote;
 const ipc = require('electron').ipcRenderer;
 const ipcCommands = require('../ipcCommands.js');
+const {addLeftPad, removeLeftPad} = require('../stringUtils');
 
 function getApplicationList() {
   return remote.getGlobal('applicationList');
@@ -11,26 +12,13 @@ const inputUser = document.getElementById('input-user');
 const inputAutocomplete = document.getElementById('input-autocomplete');
 
 function* autocompleteGenerator(list, value) {
-  for (let i = 0; i < applicationList.length; i++) {
-    const {command} = applicationList[i];
+  for (let i = 0; i < list.length; i++) {
+    const {command} = list[i];
     // if (command.substring(0, value.length) === value) {
     if (command.includes(value)) {
       yield command;
     }
   }
-}
-
-function removeLeftPad(pattern) {
-  return (pattern || '').replace(/^ */g, '');
-}
-
-function addLeftPad(str, pattern) {
-  const trimmedPattern = removeLeftPad(pattern);
-  const index = str.indexOf(trimmedPattern);
-  if (index > -1) {
-    return (new Array(index + 1).fill('').join(' ') + trimmedPattern);
-  }
-  return trimmedPattern;
 }
 
 ipc.on(ipcCommands.RUN_COMMAND_DONE, (e, success) => {
@@ -51,51 +39,58 @@ let autocomplete = null;
 let lastKeyCode = '';
 
 inputUser.addEventListener('keydown', (e) => {
-  const value = removeLeftPad(inputUser.value);
+  const userValue = removeLeftPad(inputUser.value);
+  const autocompleteValue = inputAutocomplete.value;
   const double = (lastKeyCode === e.code);
 
   lastKeyCode = e.code;
 
   if (e.code === 'Escape') {
-    const hide = (!value || double);
+    const hide = (!userValue || double);
     inputUser.value = '';
     inputAutocomplete.value = '';
     if (hide) {
       ipc.send(ipcCommands.HIDE);
     }
     e.preventDefault();
-  } else if (e.code === 'Enter' && value) {
+  } else if (e.code === 'Enter' && userValue) {
     // TODO: use styles
     inputUser.style.color = 'yellow';
     const appCommand = applicationList.find(({command}) => (command === inputAutocomplete.value));
-    ipc.send(ipcCommands.RUN_COMMAND, appCommand || {rawPath: value});
+    ipc.send(ipcCommands.RUN_COMMAND, appCommand || {rawPath: userValue});
     e.preventDefault();
   } else if (e.code === 'Tab') {
     let next = autocomplete.next();
     if (next.done) {
-      autocomplete = autocompleteGenerator(applicationList, value);
+      autocomplete = autocompleteGenerator(applicationList, userValue);
       next = autocomplete.next();
     }
 
     if (next.value) {
       inputAutocomplete.value = next.value;
     } else {
-      inputAutocomplete.value = value;
+      inputAutocomplete.value = userValue;
     }
 
     e.preventDefault();
   } else if (e.code === 'ArrowRight') {
     inputUser.value = inputAutocomplete.value;
-  } else {
-    inputAutocomplete.value = '';
+  }
+
+  if (userValue !== inputUser.value || autocompleteValue !== inputAutocomplete.value) {
+    inputUser.value = addLeftPad(inputAutocomplete.value, inputUser.value);
   }
 });
 
-inputUser.addEventListener('keyup', (e) => {
+inputUser.addEventListener('input', () => {
   const value = removeLeftPad(inputUser.value);
-  if (e.code !== 'Tab' && value) {
+
+  if (value) {
     autocomplete = autocompleteGenerator(applicationList, value);
     inputAutocomplete.value = (autocomplete.next().value || '');
+    inputUser.value = addLeftPad(inputAutocomplete.value, value);
+  } else {
+    inputAutocomplete.value = '';
+    inputUser.value = '';
   }
-  inputUser.value = addLeftPad(inputAutocomplete.value, value);
 });

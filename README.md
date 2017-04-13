@@ -18,6 +18,7 @@ HotKey: `Super+Space`
 
 ## ToDo:
 - [ ] tests
+- [ ] run history
 - [ ] configuration file
 - [ ] configuration window
 - [ ] driver for iOS/Win?
