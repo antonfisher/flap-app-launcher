@@ -1,5 +1,7 @@
 # Flap-App-Launcher
 
+[![Build Status](https://travis-ci.org/antonfisher/flap-app-launcher.svg?branch=master)](https://travis-ci.org/antonfisher/flap-app-launcher)
+
 This is an applications launcher for Ubuntu.
 
 ![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/screenshot-v1.png)
