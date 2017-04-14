@@ -21,14 +21,15 @@ module.exports = {
       height: WINDOW_HEIGHT,
       center: false,
       frame: false,
-      transparent: true,
+      transparent: false,
       darkTheme: true,
       resizable: false,
       titleBarStyle: 'hidden',
       skipTaskbar: true,
       // show: false,
       alwaysOnTop: true,
-      defaultFontFamily: 'monospace, "Ubuntu Mono", "Courier New"'
+      defaultFontFamily: 'monospace, "Ubuntu Mono", "Courier New"',
+      backgroundColor: '#f333'
     });
 
     wnd.loadURL(url.format({
