@@ -16,9 +16,6 @@ let driver;
 logger.info('Start application');
 logger.info(`HotKey binding: ${DEFAULT_START_HOTKEYS}`);
 
-// preload stats to cache
-statistics.loadStats();
-
 // 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
 if (process.platform === 'linux') {
   driver = new LinuxDriver();
@@ -28,10 +25,26 @@ if (process.platform === 'linux') {
 }
 
 app.on('ready', () => {
-  driver.getApplicationList()
+  Promise.all([
+    driver.getApplicationList(),
+    statistics.loadStats()
+  ])
+    .then(([applications, stats]) => {
+      const applicationsMap = applications.map(({path}) => path);
+      Object.keys(stats).forEach((path) => {
+        if (!applicationsMap[path]) {
+          applications.push({
+            rawPath: path,
+            command: path
+          });
+        }
+      });
+      return applications;
+    })
+    .then(statistics.sortCommands)
     .then((applications) => {
-      global.applicationList = statistics.sortCommands(applications);
-      logger.info(`Total applications found: ${global.applicationList.length}`);
+      global.applicationList = applications;
+      logger.info(`Total applications found: ${applications.length}`);
     })
     .then(() => {
       wnd = createWindow();

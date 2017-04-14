@@ -15,28 +15,31 @@ function getCachedStats() {
   return _cachedStats;
 }
 
-function loadStats(callback) {
-  const cachedStats = getCachedStats();
-  if (cachedStats) {
-    if (callback) {
-      return callback(cachedStats);
+function loadStats() {
+  return new Promise((resolve, reject) => {
+    const cachedStats = getCachedStats();
+
+    if (cachedStats) {
+      return resolve(cachedStats);
     }
-    return null;
-  }
-  return fs.readFile(STATISTICS_FILE_PATH, (err, data) => {
-    if (err) {
-      setCachedStats({});
-    } else {
+
+    return fs.readFile(STATISTICS_FILE_PATH, (err, data) => {
+      if (err) {
+        logger.warn(`Cannot read statistics file: ${err}`);
+        setCachedStats({});
+        return reject(err);
+      }
+
       try {
         setCachedStats(JSON.parse(data));
       } catch (e) {
-        logger.warn(`Cannot read statistics file: ${e}`);
+        logger.warn(`Cannot parse statistics file: ${e}`);
         setCachedStats({});
+        return reject(e);
       }
-    }
-    if (callback) {
-      callback(getCachedStats());
-    }
+
+      return resolve(getCachedStats());
+    });
   });
 }
 
@@ -50,24 +53,27 @@ function saveStats(data) {
 }
 
 function addRecord(commandPath) {
-  return loadStats((stats) => {
-    stats[commandPath] = stats[commandPath] || 0;
-    stats[commandPath]++;
-    saveStats(stats);
-  });
+  return loadStats()
+    .then((stats) => {
+      stats[commandPath] = stats[commandPath] || 0;
+      stats[commandPath]++;
+      saveStats(stats);
+    });
 }
 
 function sortCommands(commands) {
   return commands.sort((a, b) => {
+    const aPath = (a.path || a.rawPath);
+    const bPath = (b.path || b.rawPath);
     const cachedStats = getCachedStats();
     if (cachedStats) {
-      const aRunCount = cachedStats[a.path];
-      const bRunCount = cachedStats[b.path];
+      const aRunCount = cachedStats[aPath];
+      const bRunCount = cachedStats[bPath];
       if (aRunCount || bRunCount) {
         return ((bRunCount || 0) - (aRunCount || 0));
       }
     }
-    return a.path > b.path;
+    return aPath > bPath;
   });
 }
 
