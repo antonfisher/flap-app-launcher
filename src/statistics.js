@@ -15,40 +15,47 @@ function getCachedStats() {
   return _cachedStats;
 }
 
+function saveStats(data) {
+  return fs.writeFile(STATISTICS_FILE_PATH, JSON.stringify(data), {flag: 'w'}, (err) => {
+    if (err) {
+      logger.warn(`Cannot write statistics file: ${err}`);
+    } else {
+      logger.info(`New statistics file: ${STATISTICS_FILE_PATH}`);
+    }
+    setCachedStats(data);
+  });
+}
+
 function loadStats() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const cachedStats = getCachedStats();
 
     if (cachedStats) {
       return resolve(cachedStats);
     }
 
+    const fallback = () => {
+      logger.info('Create new statistics file...');
+      saveStats({});
+      setCachedStats({});
+      return resolve(getCachedStats());
+    };
+
     return fs.readFile(STATISTICS_FILE_PATH, (err, data) => {
       if (err) {
         logger.warn(`Cannot read statistics file: ${err}`);
-        setCachedStats({});
-        return reject(err);
+        return fallback();
       }
 
       try {
         setCachedStats(JSON.parse(data));
       } catch (e) {
         logger.warn(`Cannot parse statistics file: ${e}`);
-        setCachedStats({});
-        return reject(e);
+        return fallback();
       }
 
       return resolve(getCachedStats());
     });
-  });
-}
-
-function saveStats(data) {
-  return fs.writeFile(STATISTICS_FILE_PATH, JSON.stringify(data), {flag: 'w'}, (err) => {
-    if (err) {
-      logger.error(`Cannot write statistics file: ${err}`);
-    }
-    setCachedStats(data);
   });
 }
 

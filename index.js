@@ -5,8 +5,6 @@ const ipcCommands = require('./src/ipcCommands.js');
 const logger = require('./src/logger.js');
 const statistics = require('./src/statistics.js');
 
-require('electron-reload')(__dirname);
-
 const {app, globalShortcut, ipcMain: ipc} = electron;
 const DEFAULT_START_HOTKEYS = 'Super+Space';
 
