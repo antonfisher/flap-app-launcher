@@ -19,8 +19,6 @@ function saveStats(data) {
   return fs.writeFile(STATISTICS_FILE_PATH, JSON.stringify(data), {flag: 'w'}, (err) => {
     if (err) {
       logger.warn(`Cannot write statistics file: ${err}`);
-    } else {
-      logger.info(`New statistics file: ${STATISTICS_FILE_PATH}`);
     }
     setCachedStats(data);
   });
@@ -35,7 +33,7 @@ function loadStats() {
     }
 
     const fallback = () => {
-      logger.info('Create new statistics file...');
+      logger.info(`Create new statistics file "${STATISTICS_FILE_PATH}"...`);
       saveStats({});
       setCachedStats({});
       return resolve(getCachedStats());
@@ -43,17 +41,18 @@ function loadStats() {
 
     return fs.readFile(STATISTICS_FILE_PATH, (err, data) => {
       if (err) {
-        logger.warn(`Cannot read statistics file: ${err}`);
+        logger.warn(`Cannot read statistics file "${STATISTICS_FILE_PATH}": ${err}`);
         return fallback();
       }
 
       try {
         setCachedStats(JSON.parse(data));
       } catch (e) {
-        logger.warn(`Cannot parse statistics file: ${e}`);
+        logger.warn(`Cannot parse statistics file "${STATISTICS_FILE_PATH}": ${e}`);
         return fallback();
       }
 
+      logger.info(`Statistics loaded from file "${STATISTICS_FILE_PATH}"`);
       return resolve(getCachedStats());
     });
   });

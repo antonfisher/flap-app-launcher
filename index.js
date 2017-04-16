@@ -18,7 +18,7 @@ logger.info(`HotKey binding: ${DEFAULT_START_HOTKEYS}`);
 if (process.platform === 'linux') {
   driver = new LinuxDriver();
 } else {
-  logger.info(`ERROR: platform ${process.platform} is not supported.\nPlease send request to a.fschr@gmail.com.`);
+  logger.error(`ERROR: platform ${process.platform} is not supported.\nPlease send request to a.fschr@gmail.com.`);
   process.exit(1);
 }
 
@@ -68,14 +68,13 @@ app.on('ready', () => {
       });
 
       ipc.on(ipcCommands.RUN_COMMAND, (event, command) => {
-        logger.info(`Run command: "${command.path || command.rawPath}"`);
+        logger.info(`Run command: "${command.path || command.rawPath}"...`);
         driver.runApplication(command, (result) => {
           logger.info(`     result: "${command.path || command.rawPath}" is ${result ? 'OK' : 'FAIL'}`);
           if (result) {
             wnd.hide();
-          } else {
-            event.sender.send(ipcCommands.RUN_COMMAND_DONE, result);
           }
+          event.sender.send(ipcCommands.RUN_COMMAND_DONE, result);
           statistics.addRecord(command.path || command.rawPath);
         });
       });
