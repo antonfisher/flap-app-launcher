@@ -36,6 +36,8 @@ Add to autorun on Ubuntu:
 git clone git@github.com:antonfisher/flap-app-launcher.git
 cd flap-app-launcher
 npm install
+npm run lint
+npm test
 npm start
 ```
 
