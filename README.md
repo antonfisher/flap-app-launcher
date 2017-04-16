@@ -11,19 +11,38 @@ This is an applications launcher for Ubuntu.
 
 ## Features:
 - minimalistic design
-- indexing the main menu applications
 - suggestions on TAB button
 - suggestions respect usage statistic
 - run command in the terminal if not found in the index
+- history of any run commnads.
 
-## Usage:
-Start: `npm start`
+## Application list source:
+- main menu shortcuts
+- any commands what were run before.
 
-HotKey: `Super+Space`
+## Instalation:
+Default HotKey: `Super+Space`.
+
+### Using NPM:
+```bash
+npm install -g flap-app-launcher
+```
+Add to autorun on Ubuntu:
+
+![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/autorun-ubuntu-v1.png)
+
+### Development mode:
+```bash
+git clone git@github.com:antonfisher/flap-app-launcher.git
+cd flap-app-launcher
+npm install
+npm start
+```
 
 ## ToDo:
+- [x] run history
+- [ ] build binaries
 - [ ] tests
-- [ ] run history
 - [ ] configuration file
 - [ ] configuration window
 - [ ] driver for iOS/Win?

@@ -1,15 +1,16 @@
 {
   "name": "flap-app-launcher",
   "version": "0.1.0",
-  "description": "Tiny, slim application launcher",
+  "description": "Tiny, slim application launcher for Ubuntu",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/.bin/electron .",
+    "start": "electron .",
     "test": "mocha --recursive ./tests",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
     "build": "electron-packager --overwrite --out=build --ignore='^(.*tests.*|.*\\.(log|stats|gitignore|idea|travis|eslint).*)$' ./"
   },
   "keywords": [
+    "electronjs",
     "launcher"
   ],
   "author": "Anton Fisher <a.fschr@gmail.com> (http://antonfisher.com)",
