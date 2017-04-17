@@ -7,6 +7,9 @@ node_modules
 # Build directory
 build
 
+# Tests coverage directory
+coverage
+
 # Application files
 .flap-app-launcher.log
 .flap-app-launcher.stats
