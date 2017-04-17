@@ -5,11 +5,13 @@
   "main": "index.js",
   "bin": "./run-production.js",
   "scripts": {
+    "dev": "export NODE_ENV=development && electron .",
     "start": "electron .",
     "test": "export NODE_ENV=test && mocha --recursive ./tests",
     "test:global-install": "sudo npm -g remove flap-app-launcher && sudo npm install -g ./ && npm list -g --depth 0",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
-    "build": "electron-packager --overwrite --out=build --ignore='^(.*tests.*|.*\\.(log|stats|gitignore|idea|travis|eslint).*)$' ./"
+    "build": "electron-packager --overwrite --out=build --ignore='^(.*tests.*|.*\\.(log|stats|gitignore|idea|travis|eslint).*)$' ./",
+    "postbuild": "cd ./build && tar -czf flap-app-launcher-linux-x64.tar.gz flap-app-launcher-linux-x64"
   },
   "keywords": [
     "electronjs",

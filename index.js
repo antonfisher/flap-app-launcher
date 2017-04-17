@@ -1,3 +1,5 @@
+process.env.NODE_ENV = (process.env.NODE_ENV || 'production');
+
 const electron = require('electron');
 const LinuxDriver = require('./src/drivers/linux.js');
 const {createWindow} = require('./src/window.js');
@@ -11,7 +13,7 @@ const DEFAULT_START_HOTKEYS = 'Super+Space';
 let wnd;
 let driver;
 
-logger.info('Start application');
+logger.info(`Start application, mode: ${process.env.NODE_ENV}`);
 logger.info(`HotKey binding: ${DEFAULT_START_HOTKEYS}`);
 
 // 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
