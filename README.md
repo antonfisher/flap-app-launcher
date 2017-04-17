@@ -6,7 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/antonfisher/flap-app-launcher/badge.svg?branch=master)](https://coveralls.io/github/antonfisher/flap-app-launcher?branch=master)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/antonfisher/flap-app-launcher/blob/master/LICENSE)
 
-This is an applications launcher for Ubuntu.
+Compact applications launcher for Ubuntu.
 
 ![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/flap-app-launcher-demo-v1.gif)
 
