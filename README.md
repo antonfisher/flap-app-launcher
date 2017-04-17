@@ -25,7 +25,7 @@ Default HotKey: `Super+Space`.
 
 ### Using NPM:
 ```bash
-npm install -g flap-app-launcher
+sudo npm install -g flap-app-launcher
 ```
 Add to autorun on Ubuntu:
 
