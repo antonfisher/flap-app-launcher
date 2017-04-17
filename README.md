@@ -39,7 +39,7 @@ cd ./flap-app-launcher-linux-x64
 ./flap-app-launcher
 ```
 
-### From sources mode:
+### From sources:
 ```bash
 git clone git@github.com:antonfisher/flap-app-launcher.git
 cd flap-app-launcher
@@ -59,6 +59,7 @@ The _Command_ must be:
 ![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/autorun-ubuntu-v2.png)
 
 ## ToDo:
+- [ ] record a GIF for demo
 - [ ] automate release process
 - [ ] automate build binaries
 - [ ] tests coverage
