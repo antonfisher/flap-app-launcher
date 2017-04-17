@@ -39,14 +39,15 @@ cd ./flap-app-launcher-linux-x64
 ./flap-app-launcher
 ```
 
-### Development mode:
+### From sources mode:
 ```bash
 git clone git@github.com:antonfisher/flap-app-launcher.git
 cd flap-app-launcher
 npm install
 npm run lint
 npm test
-npm start
+npm start   # production mode
+npm run dev # development mode
 ```
 
 ## Add to the autorun on Ubuntu:
