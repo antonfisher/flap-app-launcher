@@ -28,7 +28,10 @@ app.on('ready', () => {
     statistics.loadStats()
   ])
     .then(([applications, stats]) => {
-      const applicationsMap = applications.map(({path}) => path);
+      const applicationsMap = applications.reduce((acc, item) => {
+        acc[item.path] = item;
+        return acc;
+      }, {});
       Object.keys(stats).forEach((path) => {
         if (!applicationsMap[path]) {
           applications.push({

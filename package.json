@@ -3,9 +3,11 @@
   "version": "1.0.1",
   "description": "Tiny, slim application launcher for Ubuntu",
   "main": "index.js",
+  "bin": "./run-production.js",
   "scripts": {
     "start": "electron .",
-    "test": "mocha --recursive ./tests",
+    "test": "export NODE_ENV=test && mocha --recursive ./tests",
+    "test:global-install": "sudo npm -g remove flap-app-launcher && sudo npm install -g ./ && npm list -g --depth 0",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
     "build": "electron-packager --overwrite --out=build --ignore='^(.*tests.*|.*\\.(log|stats|gitignore|idea|travis|eslint).*)$' ./"
   },

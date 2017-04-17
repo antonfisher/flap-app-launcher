@@ -29,7 +29,7 @@ npm install -g flap-app-launcher
 ```
 Add to autorun on Ubuntu:
 
-![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/autorun-ubuntu-v1.png)
+![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/autorun-ubuntu-v2.png)
 
 ### Development mode:
 ```bash

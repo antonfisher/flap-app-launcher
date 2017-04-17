@@ -1,9 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+const {homedir} = require('os');
 const logger = require('./logger.js');
 
-const STATISTICS_FILE_NAME = 'flap-app-launcher.stats';
-const STATISTICS_FILE_PATH = path.join(__dirname, '..', STATISTICS_FILE_NAME);
+const STATISTICS_FILE_NAME = '.flap-app-launcher.stats';
+const STATISTICS_FILE_PATH = (
+  process.env.NODE_ENV === 'production'
+    ? path.join(homedir(), STATISTICS_FILE_NAME)
+    : path.join(__dirname, '..', STATISTICS_FILE_NAME)
+);
 
 let _cachedStats = null;
 
