@@ -8,7 +8,7 @@
 
 This is an applications launcher for Ubuntu.
 
-![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/screenshot-v1.png)
+![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/flap-app-launcher-demo-v1.gif)
 
 ## Features:
 - minimalistic design
@@ -60,7 +60,6 @@ The _Command_ must be:
 ![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/autorun-ubuntu-v2.png)
 
 ## ToDo:
-- [ ] record a GIF for demo
 - [ ] automate release process
 - [ ] automate build binaries
 - [ ] tests coverage
