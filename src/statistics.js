@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const {homedir} = require('os');
-const logger = require('./logger.js');
+const logger = require('./logger');
 
 const STATISTICS_FILE_NAME = '.flap-app-launcher.stats';
 const STATISTICS_FILE_PATH = (
@@ -20,12 +20,16 @@ function getCachedStats() {
   return _cachedStats;
 }
 
-function saveStats(data) {
+//TODO use promise
+function saveStats(data, callback) {
   return fs.writeFile(STATISTICS_FILE_PATH, JSON.stringify(data), {flag: 'w'}, (err) => {
     if (err) {
       logger.warn(`Cannot write statistics file: ${err}`);
     }
     setCachedStats(data);
+    if (callback) {
+      callback();
+    }
   });
 }
 
@@ -89,6 +93,7 @@ function sortCommands(commands) {
 }
 
 module.exports = {
+  saveStats,
   loadStats,
   addRecord,
   getCachedStats,

@@ -1,6 +1,6 @@
 const path = require('path');
 const {homedir} = require('os');
-const winston = require('winston');
+const {Logger, transports: {Console, File}} = require('winston');
 
 const LOG_FILE_NAME = '.flap-app-launcher.log';
 const LOG_FILE_PATH = (
@@ -9,21 +9,13 @@ const LOG_FILE_PATH = (
     : path.join(__dirname, '..', LOG_FILE_NAME)
 );
 
-const transports = [
-  new (winston.transports.Console)()
-];
+const logger = new Logger({
+  transports: [
+    new Console(),
+    new File({filename: LOG_FILE_PATH, json: false})
+  ]
+});
 
-if (process.env.NODE_ENV !== 'test') {
-  transports.push(
-    new (winston.transports.File)({
-      filename: LOG_FILE_PATH,
-      json: false
-    })
-  );
-}
-
-const logger = new (winston.Logger)({transports});
-
-logger.info(`Application logs file "${LOG_FILE_PATH}"`);
+logger.info(`Application logs file: ${LOG_FILE_PATH}`);
 
 module.exports = logger;
