@@ -23,7 +23,7 @@
   "author": "Anton Fisher <a.fschr@gmail.com> (http://antonfisher.com)",
   "license": "MIT",
   "dependencies": {
-    "electron": "1.6.2",
+    "electron": "1.6.5",
     "winston": "2.3.1"
   },
   "devDependencies": {
