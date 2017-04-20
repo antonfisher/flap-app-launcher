@@ -81,6 +81,7 @@ app.on('ready', () => {
           }
           event.sender.send(ipcCommands.RUN_COMMAND_DONE, result);
           statistics.addRecord(command.path || command.rawPath);
+          //sort applications list again
         });
       });
     })

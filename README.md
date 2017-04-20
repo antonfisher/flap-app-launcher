@@ -9,7 +9,7 @@ Compact applications launcher for Ubuntu.
 
 ![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/flap-app-launcher-demo-v1.gif)
 
-## Features:
+## Features
 - minimalistic design
 - suggestions on TAB button
 - suggestions respect usage statistics
@@ -20,18 +20,20 @@ The application list generates from:
 - main menu shortcuts
 - any commands what were run before.
 
-## Configuration:
+## Configuration
 Default HotKey: `Super+Space`.
 
-## Instalation:
+## Installation
 
-### Using NPM:
+There are 3 ways to install the application:
+
+#### Using NPM:
 ```bash
 sudo npm install -g flap-app-launcher
 ```
 Run anywhere with `flap-app-launcher`.
 
-### Download binaries:
+#### Download binaries:
 ```bash
 wget https://github.com/antonfisher/flap-app-launcher/releases/download/v1.0.3/flap-app-launcher-linux-x64.tar.gz
 tar -xzf flap-app-launcher-linux-x64.tar.gz
@@ -39,7 +41,7 @@ cd ./flap-app-launcher-linux-x64
 ./flap-app-launcher
 ```
 
-### From sources:
+#### From sources (for development):
 ```bash
 git clone git@github.com:antonfisher/flap-app-launcher.git
 cd flap-app-launcher
@@ -50,7 +52,7 @@ npm start   # production mode
 npm run dev # development mode
 ```
 
-## Add to the autorun on Ubuntu:
+## Add to the autorun on Ubuntu
 
 The _Command_ must be:
 - for NPM installation: `flap-app-launcher`
@@ -58,7 +60,7 @@ The _Command_ must be:
 
 ![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/autorun-ubuntu-v2.png)
 
-## ToDo:
+## ToDo
 - [ ] automate release process
 - [ ] automate build binaries
 - [ ] tests coverage

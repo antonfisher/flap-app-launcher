@@ -67,6 +67,7 @@ function loadStats() {
   });
 }
 
+// return new stats to update global applications cache in runtime
 function addRecord(commandPath) {
   return loadStats()
     .then((stats) => {
