@@ -6,15 +6,15 @@ const {createWindow} = require('./src/window.js');
 const ipcCommands = require('./src/ipcCommands.js');
 const logger = require('./src/logger.js');
 const statistics = require('./src/statistics.js');
+const configs = require('./src/configs.js');
 
 const {app, globalShortcut, ipcMain: ipc} = electron;
-const DEFAULT_START_HOTKEYS = 'Super+Space';
 
 let wnd;
 let driver;
+let config;
 
 logger.info(`Start application, mode: ${process.env.NODE_ENV}`);
-logger.info(`HotKey binding: ${DEFAULT_START_HOTKEYS}`);
 
 // 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
 if (process.platform === 'linux') {
@@ -27,9 +27,14 @@ if (process.platform === 'linux') {
 app.on('ready', () => {
   Promise.all([
     driver.getApplicationList(),
-    statistics.loadStats()
+    statistics.loadStats(),
+    configs.loadConfig()
   ])
-    .then(([applications, stats]) => {
+    .then(([applications, stats, loadedConfig]) => {
+      config = loadedConfig;
+      logger.info('Application config:');
+      logger.info(` - hotKey binding: ${config.hotkey}`);
+
       const applicationsMap = applications.reduce((acc, item) => {
         acc[item.path] = item;
         return acc;
@@ -53,7 +58,7 @@ app.on('ready', () => {
       wnd = createWindow();
     })
     .then(() => {
-      globalShortcut.register(DEFAULT_START_HOTKEYS, () => {
+      globalShortcut.register(config.hotkey, () => {
         wnd.setSkipTaskbar(true);
         wnd.setAlwaysOnTop(true);
         wnd.show();
