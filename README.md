@@ -56,7 +56,7 @@ The config file will be created after first application run.
 Default hotkey: `Super+Space`.
 To change default hotkey edit the config file:
 ```
-# for npm or banaries installation:
+# for npm or binaries installation:
 vim ~/.flap-app-launcher.config.json
 
 # for source code installation:
