@@ -11,11 +11,25 @@ const LOG_FILE_PATH = (
 
 const logger = new Logger({
   transports: [
-    new Console(),
-    new File({filename: LOG_FILE_PATH, json: false})
+    new Console({
+      level: 'debug',
+      colorize: true,
+      timestamp: true,
+      prettyPrint: true
+    }),
+    new File({
+      filename: LOG_FILE_PATH,
+      handleExceptions: true,
+      humanReadableUnhandledException: true,
+      prettyPrint: true,
+      tailable: true,
+      maxsize: 10 * 1024 * 1024,
+      maxFiles: 10,
+      json: false
+    })
   ]
 });
 
-logger.info(`Application logs file: ${LOG_FILE_PATH}`);
+logger.log(`Application logs file: ${LOG_FILE_PATH}`);
 
 module.exports = logger;

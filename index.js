@@ -14,7 +14,7 @@ let wnd;
 let driver;
 let config;
 
-logger.info(`Start application, mode: ${process.env.NODE_ENV}`);
+logger.info(`Start application, mode: ${process.env.NODE_ENV}, platform: ${process.platform}`);
 
 // 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
 if (process.platform === 'linux') {
@@ -33,7 +33,7 @@ app.on('ready', () => {
     .then(([applications, stats, loadedConfig]) => {
       config = loadedConfig;
       logger.info('Application config:');
-      logger.info(` - hotKey binding: ${config.hotkey}`);
+      logger.info(` - hotkey binding: ${config.hotkey}`);
 
       const applicationsMap = applications.reduce((acc, item) => {
         acc[item.path] = item;
@@ -102,11 +102,5 @@ app.on('will-quit', () => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
-  }
-});
-
-app.on('activate', () => {
-  if (wnd === null) {
-    wnd = createWindow();
   }
 });
