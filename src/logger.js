@@ -30,6 +30,6 @@ const logger = new Logger({
   ]
 });
 
-logger.log(`Application logs file: ${LOG_FILE_PATH}`);
+logger.info(`Application logs file: ${LOG_FILE_PATH}`);
 
 module.exports = logger;
