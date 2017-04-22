@@ -18,7 +18,8 @@
   },
   "keywords": [
     "electronjs",
-    "launcher"
+    "launcher",
+    "ubuntu"
   ],
   "author": "Anton Fisher <a.fschr@gmail.com> (http://antonfisher.com)",
   "license": "MIT",

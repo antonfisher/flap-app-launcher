@@ -20,9 +20,6 @@ The application list generates from:
 - main menu shortcuts
 - any commands what were run before.
 
-## Configuration
-Default HotKey: `Super+Space`.
-
 ## Installation
 
 There are 3 ways to install the application:
@@ -52,6 +49,21 @@ npm start   # production mode
 npm run dev # development mode
 ```
 
+## Configuration
+
+The config file will be created after first application run.
+
+Default hotkey: `Super+Space`.
+To change default hotkey edit the config file:
+```
+# for npm or banaries installation:
+vim ~/.flap-app-launcher.config.json
+
+# for source code installation:
+vim %SOURCE_DIR%/.flap-app-launcher.config.json
+```
+__NOTE:__ single hotkeys (like just `Super`) are not supported now.
+
 ## Add to the autorun on Ubuntu
 
 The _Command_ must be:
@@ -61,9 +73,9 @@ The _Command_ must be:
 ![Main view](https://raw.githubusercontent.com/antonfisher/flap-app-launcher/docs/images/autorun-ubuntu-v2.png)
 
 ## ToDo
+- [x] automate build binaries
+- [x] tests coverage
+- [x] configuration file
 - [ ] automate release process
-- [ ] automate build binaries
-- [ ] tests coverage
-- [ ] configuration file
-- [ ] configuration window (?)
+- [ ] configuration window
 - [ ] driver for iOS/Win (?)
