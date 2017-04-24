@@ -1,7 +1,7 @@
 const remote = require('electron').remote;
 const ipc = require('electron').ipcRenderer;
-const ipcCommands = require('../ipcCommands.js');
-const {addLeftPad, removeLeftPad} = require('../stringUtils');
+const ipcCommands = require('../../ipcCommands.js');
+const {addLeftPad, removeLeftPad} = require('../../stringUtils');
 
 function getApplicationList() {
   return remote.getGlobal('applicationList');
@@ -10,11 +10,11 @@ function getApplicationList() {
 const applicationList = getApplicationList();
 const inputUser = document.getElementById('input-user');
 const inputAutocomplete = document.getElementById('input-autocomplete');
+const iconSettings = document.getElementById('icon-settings');
 
 function* autocompleteGenerator(list, value) {
   for (let i = 0; i < list.length; i++) {
     const {command} = list[i];
-    // if (command.substring(0, value.length) === value) {
     if (command.includes(value)) {
       yield command;
     }
@@ -93,4 +93,8 @@ inputUser.addEventListener('input', () => {
     inputAutocomplete.value = '';
     inputUser.value = '';
   }
+});
+
+iconSettings.addEventListener('click', () => {
+  ipc.send(ipcCommands.OPEN_SETTINGS_WINDOW);
 });

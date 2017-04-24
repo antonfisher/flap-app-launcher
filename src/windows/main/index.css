@@ -13,6 +13,7 @@ body {
     font-size: 15px;
     box-sizing: border-box;
     background-color: #aaa;
+    overflow: hidden;
 }
 
 input {
@@ -37,7 +38,7 @@ input {
 }
 
 #input-autocomplete {
-    z-index: 1;
+    z-index: 10;
     width: 100%;
     color: #999;
     border: none;
@@ -49,7 +50,7 @@ input {
 #input-user {
     top: 0;
     left: 0;
-    z-index: 2;
+    z-index: 20;
     width: 100%;
     border: none;
     outline: none;
@@ -57,4 +58,15 @@ input {
     position: absolute;
     font-size: inherit;
     background: transparent;
+}
+
+#icon-settings {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    background-color: yellow;
+    z-index: 30;
 }

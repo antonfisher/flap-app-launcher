@@ -1,18 +1,16 @@
 const {globalShortcut, ipcMain: ipc} = require('electron');
-const window = require('./window');
 const logger = require('./logger');
 const configs = require('./configs');
+const windows = require('./windows');
 const statistics = require('./statistics');
 const ipcCommands = require('./ipcCommands');
-
-const WINDOW_WIDTH = 500;
-const WINDOW_HEIGHT = 30;
+const {version} = require('../package.json');
 
 class Application {
   constructor(driver) {
     this.driver = driver;
-    this.config = {};
     this.mainWindow = null;
+    global.version = version;
   }
 
   run() {
@@ -27,9 +25,9 @@ class Application {
   }
 
   saveConfig(loadedConfig) {
-    this.config = loadedConfig;
+    global.config = loadedConfig;
     logger.info('Application config:');
-    logger.info(` - hotkey binding: ${this.config.hotkey}`);
+    logger.info(` - hotkey binding: ${global.config.hotkey}`);
   }
 
   combineAppsAndStats(applications, stats) {
@@ -54,19 +52,25 @@ class Application {
   }
 
   createMainWindow() {
-    this.mainWindow = window.create(window.TYPE_MAIN, WINDOW_WIDTH, WINDOW_HEIGHT);
+    logger.verbose('Creating main window..');
+    this.mainWindow = windows.createMainWindow();
 
-    globalShortcut.register(this.config.hotkey, () => {
+    globalShortcut.register(global.config.hotkey, () => {
       this.mainWindow.setSkipTaskbar(true);
       this.mainWindow.setAlwaysOnTop(true);
       this.mainWindow.show();
       this.mainWindow.focus();
     });
 
-    this.mainWindow.on('blur', () => this.mainWindow.hide());
     this.mainWindow.on('close', () => (this.mainWindow = null));
+    this.mainWindow.on('blur', () => {
+      if (!this.settingsWindow) {
+        this.mainWindow.hide();
+      }
+    });
 
     ipc.on(ipcCommands.HIDE, () => this.mainWindow.hide());
+    ipc.on(ipcCommands.OPEN_SETTINGS_WINDOW, () => this.createSettingsWindow());
     ipc.on(ipcCommands.RUN_COMMAND, (event, command) => {
       logger.info(`Run command: "${command.path || command.rawPath}"...`);
       this.driver.runApplication(command, (result) => {
@@ -79,6 +83,14 @@ class Application {
         //sort applications list again
       });
     });
+  }
+
+  createSettingsWindow() {
+    logger.verbose('Creating settings window..');
+    this.settingsWindow = windows.createSettingsWindow();
+
+    ipc.on(ipcCommands.CLOSE, () => this.settingsWindow.close());
+    this.settingsWindow.on('close', () => (this.settingsWindow = null));
   }
 }
 

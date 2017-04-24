@@ -2,12 +2,13 @@ process.env.NODE_ENV = (process.env.NODE_ENV || 'production');
 
 const electron = require('electron');
 const logger = require('./src/logger');
+const {version} = require('./package.json');
 const Application = require('./src/application');
 const LinuxDriver = require('./src/drivers/linux');
 
 const {app, globalShortcut} = electron;
 
-logger.info(`Start application, mode: ${process.env.NODE_ENV}, platform: ${process.platform}`);
+logger.info(`Start application v${version}, mode: ${process.env.NODE_ENV}, platform: ${process.platform}`);
 
 process.on('uncaughtException', (error) => {
   try {
