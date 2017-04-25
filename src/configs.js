@@ -4,6 +4,7 @@ const {homedir} = require('os');
 const logger = require('./logger');
 
 const DEFAULT_CONFIG = {
+  width: 500,
   hotkey: 'Super+Space'
 };
 

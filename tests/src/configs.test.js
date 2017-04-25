@@ -2,7 +2,7 @@ const assert = require('assert');
 const simple = require('simple-mock');
 const proxyquire = require('proxyquire').noCallThru();
 
-const CONFIG_MOCK = {hotkey: 'super'};
+const CONFIG_MOCK = {hotkey: 'super', width: 500};
 const DEFAULT_STUB = {
   fs: {
     readFile: simple.stub().callbackWith(null, JSON.stringify(CONFIG_MOCK)),
@@ -133,11 +133,11 @@ describe('Config', () => {
 
     it('should save and return passed data', (done) => {
       const configs = proxyquire('../../src/configs.js', Object.assign({}, DEFAULT_STUB));
-      const newConfig = {hotkey: 'space'};
+      const newConfig = {hotkey: 'super+space'};
       configs.setCachedConfig(null);
       configs.saveConfig(newConfig)
         .then((data) => {
-          assert.deepEqual(data, newConfig);
+          assert.deepEqual(data, {hotkey: 'super+space', width: 500});
           done();
         })
         .catch(done);
@@ -149,7 +149,7 @@ describe('Config', () => {
       configs.setCachedConfig(null);
       configs.saveConfig(newConfig)
         .then((data) => {
-          assert.deepEqual(data, {hotkey: 'space'});
+          assert.deepEqual(data, {hotkey: 'space', width: 500});
           done();
         })
         .catch(done);
@@ -168,7 +168,7 @@ describe('Config', () => {
 
     it('should use previously cached values if new values were not passed for save', (done) => {
       const configs = proxyquire('../../src/configs.js', Object.assign({}, DEFAULT_STUB));
-      const previousConfig = {hotkey: 'space'};
+      const previousConfig = {hotkey: 'space', width: 500};
       configs.setCachedConfig(previousConfig);
       configs.saveConfig({})
         .then((data) => {

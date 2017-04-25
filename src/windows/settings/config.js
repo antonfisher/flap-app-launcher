@@ -4,5 +4,8 @@ module.exports = {
   backgroundColor: '#ffff',
   resizable: true,
   transparent: false,
-  skipTaskbar: false
+  skipTaskbar: false,
+  webPreferences: {
+    devTools: false
+  }
 };

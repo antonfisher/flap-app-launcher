@@ -2,8 +2,19 @@ const remote = require('electron').remote;
 const ipc = require('electron').ipcRenderer;
 const ipcCommands = require('../../ipcCommands');
 
-const version = document.getElementById('version');
-//const inputSettingsWindowWidth = document.getElementById('input-settings-window-width');
+// references
+const sectionVersion = document.getElementById('version');
+const inputSettingsWindowWidth = document.getElementById('input-settings-window-width');
+
+function getConfig() {
+  return remote.getGlobal('config');
+}
+
+function updateValues() {
+  const {width} = getConfig();
+  sectionVersion.innerHTML = `Version: ${remote.getGlobal('version')}`;
+  inputSettingsWindowWidth.value = width;
+}
 
 document.addEventListener('keydown', (e) => {
   if (e.code === 'Escape') {
@@ -12,12 +23,16 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-version.innerHTML = `Version: ${remote.getGlobal('version')}`;
 
-//ipc.on(ipcCommands.RUN_COMMAND_DONE, (e, success) => {
-//
-//});
+ipc.on(ipcCommands.SETTINGS_UPDATED, () => updateValues());
+updateValues();
 
-//inputSettingsWindowWidth.addEventListener('keydown', (e) => {
-//
-//});
+let inputSettingsWindowWidthTimeout;
+inputSettingsWindowWidth.addEventListener('change', ({target: {valueAsNumber}}) => {
+  clearTimeout(inputSettingsWindowWidthTimeout);
+  inputSettingsWindowWidthTimeout = setTimeout(() => {
+    const config = getConfig();
+    config.width = valueAsNumber;
+    ipc.send(ipcCommands.UPDATE_SETTINGS, config);
+  }, 500);
+});

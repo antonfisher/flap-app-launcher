@@ -53,7 +53,9 @@ class Application {
 
   createMainWindow() {
     logger.verbose('Creating main window..');
-    this.mainWindow = windows.createMainWindow();
+    this.mainWindow = windows.createMainWindow({
+      width: global.config.width
+    });
 
     globalShortcut.register(global.config.hotkey, () => {
       this.mainWindow.setSkipTaskbar(true);
@@ -88,6 +90,20 @@ class Application {
   createSettingsWindow() {
     logger.verbose('Creating settings window..');
     this.settingsWindow = windows.createSettingsWindow();
+
+    ipc.on(ipcCommands.UPDATE_SETTINGS, (event, updatedConfig) => {
+      configs.saveConfig(updatedConfig)
+        .then((data) => {
+          global.config = data;
+          event.sender.send(ipcCommands.SETTINGS_UPDATED);
+          if (this.mainWindow) {
+            const [width] = this.mainWindow.getSize();
+            if (width !== data.width) {
+              this.mainWindow.setWidth(data.width);
+            }
+          }
+        });
+    });
 
     ipc.on(ipcCommands.CLOSE, () => this.settingsWindow.close());
     this.settingsWindow.on('close', () => (this.settingsWindow = null));
