@@ -34,7 +34,7 @@ Run anywhere with `flap-app-launcher`.
 ```bash
 wget https://github.com/antonfisher/flap-app-launcher/releases/download/v1.0.5/flap-app-launcher-linux-x86_64.tar.gz
 tar -xzf flap-app-launcher-linux-x86_64.tar.gz
-cd ./flap-app-launcher-linux
+cd ./flap-app-launcher-linux-x64
 ./flap-app-launcher
 ```
 
