@@ -12,17 +12,10 @@ body {
   padding: 1px;
   font-size: 16px;
   box-sizing: border-box;
-  background-color: #fff;
+  color: #eee;
+  background-color: #222;
   font-family: "Ubuntu Mono", "Courier New", monospace;
   overflow: hidden;
-}
-
-input {
-  width: 95%;
-  padding: 4px;
-  border: 1px solid #666;
-  font-size: 16px;
-  font-family: "Ubuntu Mono", "Courier New", monospace;
 }
 
 h1 {
@@ -38,12 +31,49 @@ table tr, table tr td {
   padding: 0;
 }
 
+a {
+  display: inline-block;
+  padding: 7px 3px;
+  color: #bbd;
+}
+
 #container {
   margin: 20px;
 }
 
 #version {
   text-align: center;
-  color: #7f7f7f;
+  color: #999;
   padding-bottom: 15px;
+}
+
+.input {
+  width: 60px;
+  margin: 2px;
+  padding: 4px;
+  border: 1px solid #999;
+  color: #eee;
+  background-color: #333;
+  font-size: 16px;
+  font-family: "Ubuntu Mono", "Courier New", monospace;
+  flex: 1;
+}
+
+.input-wide {
+  width: 94%;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions {
+  margin-top: 13px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.actions button:hover{
+  background-color: #444;
 }

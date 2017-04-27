@@ -42,6 +42,7 @@ module.exports = function LinuxDriver() {
         callback(true);
       }, 250);
 
+      //TODO use "shell.openItem(fullPath)"?
       let execString = null;
       if (command.path) {
         execString = `${command.path} &`;

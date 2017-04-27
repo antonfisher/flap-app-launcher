@@ -50,7 +50,7 @@ inputUser.addEventListener('keydown', (e) => {
     inputUser.value = '';
     inputAutocomplete.value = '';
     if (hide) {
-      ipc.send(ipcCommands.HIDE);
+      ipc.send(ipcCommands.HIDE_MAIN_WINDOW);
     }
     e.preventDefault();
   } else if (e.code === 'Enter' && userValue) {

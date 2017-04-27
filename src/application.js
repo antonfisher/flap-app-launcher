@@ -10,6 +10,7 @@ class Application {
   constructor(driver) {
     this.driver = driver;
     this.mainWindow = null;
+    this.settingsWindow = null;
     global.version = version;
   }
 
@@ -20,13 +21,16 @@ class Application {
       .then(([applications, stats]) => this.combineAppsAndStats(applications, stats))
       .then(applications => statistics.sortCommands(applications))
       .then(applications => this.saveApplicationList(applications))
+      .then(() => this.registerShortcut())
+      .then(() => this.bindIpc())
       .then(() => this.createMainWindow())
-      .catch(err => logger.error('Cannot run application', err));
+      .catch(err => logger.error('Application error:', err));
   }
 
   saveConfig(loadedConfig) {
     global.config = loadedConfig;
     logger.info('Application config:');
+    logger.info(` - input width: ${global.config.width}`);
     logger.info(` - hotkey binding: ${global.config.hotkey}`);
   }
 
@@ -51,27 +55,22 @@ class Application {
     logger.info(`Total applications found: ${applications.length}`);
   }
 
-  createMainWindow() {
-    logger.verbose('Creating main window..');
-    this.mainWindow = windows.createMainWindow({
-      width: global.config.width
-    });
-
+  registerShortcut() {
+    logger.verbose('Register hotkey:', global.config.hotkey);
+    globalShortcut.unregisterAll();
     globalShortcut.register(global.config.hotkey, () => {
-      this.mainWindow.setSkipTaskbar(true);
-      this.mainWindow.setAlwaysOnTop(true);
-      this.mainWindow.show();
-      this.mainWindow.focus();
-    });
-
-    this.mainWindow.on('close', () => (this.mainWindow = null));
-    this.mainWindow.on('blur', () => {
-      if (!this.settingsWindow) {
-        this.mainWindow.hide();
+      if (this.mainWindow) {
+        this.mainWindow.setSkipTaskbar(true);
+        this.mainWindow.setAlwaysOnTop(true);
+        this.mainWindow.show();
+        this.mainWindow.focus();
       }
     });
+  }
 
-    ipc.on(ipcCommands.HIDE, () => this.mainWindow.hide());
+  bindIpc() {
+    //main window
+    ipc.on(ipcCommands.HIDE_MAIN_WINDOW, () => this.mainWindow.hide());
     ipc.on(ipcCommands.OPEN_SETTINGS_WINDOW, () => this.createSettingsWindow());
     ipc.on(ipcCommands.RUN_COMMAND, (event, command) => {
       logger.info(`Run command: "${command.path || command.rawPath}"...`);
@@ -85,27 +84,45 @@ class Application {
         //sort applications list again
       });
     });
+
+    //settings window
+    ipc.on(ipcCommands.UPDATE_SETTINGS, (event, changedByUserConfig) => {
+      logger.verbose('Save new config:', changedByUserConfig);
+      configs.saveConfig(changedByUserConfig)
+        .then((newConfig) => {
+          this.saveConfig(newConfig);
+          if (this.mainWindow) {
+            this.mainWindow.setWidth(global.config.width);
+          }
+          this.registerShortcut();
+          event.sender.send(ipcCommands.SETTINGS_UPDATED);
+        })
+        .catch((e) => {
+          logger.error('Cannot save config:', e);
+        });
+    });
+
+    ipc.on(ipcCommands.CLOSE_SETTINGS_WINDOW, () => {
+      this.settingsWindow.close();
+    });
+  }
+
+  createMainWindow() {
+    logger.verbose('Creating main window..');
+    this.mainWindow = windows.createMainWindow({
+      width: global.config.width
+    });
+
+    this.mainWindow.on('blur', () => {
+      if (!this.settingsWindow) {
+        this.mainWindow.hide();
+      }
+    });
   }
 
   createSettingsWindow() {
     logger.verbose('Creating settings window..');
     this.settingsWindow = windows.createSettingsWindow();
-
-    ipc.on(ipcCommands.UPDATE_SETTINGS, (event, updatedConfig) => {
-      configs.saveConfig(updatedConfig)
-        .then((data) => {
-          global.config = data;
-          event.sender.send(ipcCommands.SETTINGS_UPDATED);
-          if (this.mainWindow) {
-            const [width] = this.mainWindow.getSize();
-            if (width !== data.width) {
-              this.mainWindow.setWidth(data.width);
-            }
-          }
-        });
-    });
-
-    ipc.on(ipcCommands.CLOSE, () => this.settingsWindow.close());
     this.settingsWindow.on('close', () => (this.settingsWindow = null));
   }
 }
