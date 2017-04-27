@@ -32,9 +32,9 @@ Run anywhere with `flap-app-launcher`.
 
 #### Download binaries:
 ```bash
-wget https://github.com/antonfisher/flap-app-launcher/releases/download/v1.0.4/flap-app-launcher-linux-x64-v1.0.4.tar.gz
-tar -xzf flap-app-launcher-linux-x64.tar.gz
-cd ./flap-app-launcher-linux-x64
+wget https://github.com/antonfisher/flap-app-launcher/releases/download/v1.0.5/flap-app-launcher-linux-x86_64.tar.gz
+tar -xzf flap-app-launcher-linux-x86_64.tar.gz
+cd ./flap-app-launcher-linux
 ./flap-app-launcher
 ```
 
