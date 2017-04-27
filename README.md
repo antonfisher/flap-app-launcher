@@ -76,6 +76,7 @@ The _Command_ must be:
 - [x] automate build binaries
 - [x] tests coverage
 - [x] configuration file
+- [x] configuration window
 - [ ] automate release process
-- [ ] configuration window
 - [ ] driver for iOS/Win (?)
+- [ ] add google apps support

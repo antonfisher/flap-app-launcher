@@ -17,3 +17,8 @@ coverage
 
 # IDE
 .idea
+
+
+# NPM related
+.travis.yml
+.coveralls.yml
