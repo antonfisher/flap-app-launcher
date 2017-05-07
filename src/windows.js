@@ -9,7 +9,7 @@ const {BrowserWindow} = electron;
 const DEFAULT_WINDOW_CONFIG = {
   center: false,
   darkTheme: true,
-  defaultFontFamily: 'monospace, "Ubuntu Mono", "Courier New"',
+  defaultFontFamily: '"Ubuntu Mono", "Courier New", monospace',
   webPreferences: {
     devTools: false
   }

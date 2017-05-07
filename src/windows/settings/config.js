@@ -1,6 +1,6 @@
 module.exports = {
   width: 400,
-  height: 185,
+  height: 170,
   backgroundColor: '#f000',
   resizable: true,
   transparent: false,
