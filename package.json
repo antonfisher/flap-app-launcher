@@ -1,6 +1,6 @@
 {
   "name": "flap-app-launcher",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Compact applications launcher for Ubuntu",
   "main": "index.js",
   "bin": "./run-production.js",
