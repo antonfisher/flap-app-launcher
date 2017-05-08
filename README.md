@@ -30,12 +30,19 @@ sudo npm install -g flap-app-launcher
 ```
 Run anywhere with `flap-app-launcher`.
 
-#### Download binaries:
+#### Download *.deb package:
+Down load from [latest release page](https://github.com/antonfisher/flap-app-launcher/releases/latest).
+Or execute in the bash:
 ```bash
-wget https://github.com/antonfisher/flap-app-launcher/releases/download/v1.0.5/flap-app-launcher-linux-x86_64.tar.gz
-tar -xzf flap-app-launcher-linux-x86_64.tar.gz
-cd ./flap-app-launcher-linux-x64
-./flap-app-launcher
+# for x86_64
+wget https://github.com/antonfisher/flap-app-launcher/releases/download/v1.0.6/flap-app-launcher_1.0.6_x64.deb
+sudo dpkg -i flap-app-launcher_1.0.6_x64.deb
+flap-app-launcher
+
+# for ia32
+wget https://github.com/antonfisher/flap-app-launcher/releases/download/v1.0.6/flap-app-launcher_1.0.6_ia32.deb
+sudo dpkg -i flap-app-launcher_1.0.6_ia32.deb
+flap-app-launcher
 ```
 
 #### From sources (for development):
@@ -77,6 +84,6 @@ The _Command_ must be:
 - [x] tests coverage
 - [x] configuration file
 - [x] configuration window
-- [ ] automate release process
+- [x] automate release process
 - [ ] driver for iOS/Win (?)
 - [ ] add google apps support
