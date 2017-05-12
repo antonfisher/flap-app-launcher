@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/antonfisher/flap-app-launcher/compare/v1.0.6...v1.1.0) (2017-05-12)
+
+
+### Features
+
+* add chrome apps to the apps list ([4259a69](https://github.com/antonfisher/flap-app-launcher/commit/4259a69))
+* build for 4 archs: ai32, x64, amd64, and armv7l ([ed3da1c](https://github.com/antonfisher/flap-app-launcher/commit/ed3da1c))
+
+
+
 <a name="1.0.6"></a>
 ## [1.0.6](https://github.com/antonfisher/flap-app-launcher/compare/v1.0.5...v1.0.6) (2017-05-08)
 
