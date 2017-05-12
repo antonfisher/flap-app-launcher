@@ -1,38 +1,81 @@
-const os = require('os');
+const fs = require('fs');
+const {join} = require('path');
+const {EOL, homedir} = require('os');
 const exec = require('child_process').exec;
+const logger = require('../logger');
+
+/**
+ * @param {String} content - content of the *.desktop file
+ * @returns {Array} [{path, command}]
+ */
+function parseDesktopFile(content = '') {
+  const apps = [];
+  let path;
+  let command;
+
+  content.split(EOL).forEach((line) => {
+    const cutName = line.replace(/^Name=(.+)$/, '$1');
+    if (cutName !== line) {
+      command = cutName.toLowerCase();
+    }
+    const cutExec = line.replace(/^Exec=(.+)$/, '$1');
+    if (cutExec !== line) {
+      path = cutExec.replace(/\t/g, '').replace(/"/g, '').replace(/ +[%$].+$/, '');
+    }
+    if (path && command) {
+      apps.push({path, command});
+      path = null;
+      command = null;
+    }
+  });
+
+  return apps;
+}
+
+/**
+ * @param {String}  path     - path to *.desktop files directory
+ * @param {Boolean} useNames - use "Name=" from *.desktop files
+ * @returns {Promise}
+ */
+function parseApplicationsFolder(path, useNames = false) {
+  return new Promise((resolve) => {
+    const applications = [];
+    fs.readdir(path, (err, fileNames) => {
+      if (err) {
+        logger.error(`Cannot read user applications in directory: ${path}`);
+        return resolve(applications);
+      }
+      fileNames
+        .filter(filename => filename.endsWith('.desktop'))
+        .forEach((filename) => {
+          const content = fs.readFileSync(join(path, filename)).toString();
+          parseDesktopFile(content).forEach((app) => {
+            if (useNames) {
+              applications.push(app);
+            } else {
+              const pathArr = app.path.split(' ');
+              pathArr[0] = pathArr[0].split('/').pop();
+              applications.push({path: app.path, command: pathArr.join(' ')});
+            }
+          });
+        });
+      return resolve(applications);
+    });
+  });
+}
 
 module.exports = function LinuxDriver() {
   return {
     getApplicationList() {
-      return new Promise((resolve, reject) => {
-        exec(
-          'grep -R "Exec=." /usr/share/applications/*.desktop | sed "s/^.*Exec=\\([^%$]\\+\\).*$/\\1/"',
-          (err, result) => {
-            result = ((result || '').replace(/\t/g, '').replace(/"/g, ''));
-
-            const desktopApplications = (result.split(os.EOL) || [])
-              .map(app => app.trim())
-              .filter(app => Boolean(app));
-
-            if (err) {
-              return reject(err);
-            }
-
-            return resolve(desktopApplications);
-          }
-        );
-      })
-        .then(applications => [...new Set(applications)])
-        .then(applications => (
-          applications.map((path) => {
-            const pathArr = path.split(' ');
-            pathArr[0] = pathArr[0].split('/').pop();
-            return {
-              path,
-              command: pathArr.join(' ')
-            };
-          })
-        ));
+      return Promise.all([
+        parseApplicationsFolder(join('/usr', 'share', 'applications')),
+        parseApplicationsFolder(join(homedir(), '.local', 'share', 'applications'), true)
+      ])
+        .then(([globalApplications, userApplications]) => ([].concat(globalApplications, userApplications)))
+        .then((applications) => {
+          const uniqueMap = new Map();
+          return applications.filter(({command}) => (!uniqueMap.has(command) ? uniqueMap.set(command, true) : false));
+        });
     },
 
     runApplication(command, callback) {
