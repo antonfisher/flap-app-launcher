@@ -1,6 +1,6 @@
 {
   "name": "flap-app-launcher",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Compact applications launcher for Ubuntu",
   "main": "index.js",
   "bin": "./run-production.js",
@@ -46,6 +46,7 @@
     "mocha": "5.0.0",
     "mocha-lcov-reporter": "1.3.0",
     "proxyquire": "1.8.0",
-    "simple-mock": "0.8.0"
+    "simple-mock": "0.8.0",
+    "standard-version": "4.3.0"
   }
 }
