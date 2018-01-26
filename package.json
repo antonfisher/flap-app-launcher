@@ -11,7 +11,7 @@
     "cover": "export NODE_ENV=test && istanbul cover _mocha -- --recursive ./tests",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "test:install-dev-to-global": "sudo npm -g remove flap-app-launcher && sudo npm install -g ./ && npm list -g --depth 0",
-    "test:install-npm-to-global": "sudo npm -g remove flap-app-launcher && sudo npm install -g flap-app-launcher && npm list -g --depth 0",
+    "test:install-npm-to-global": "sudo npm -g remove flap-app-launcher && sudo npm install -g --unsafe-perm=true flap-app-launcher && npm list -g --depth 0",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
     "build:linux:make": "electron-packager --platform=linux --arch=all --overwrite --out=build --ignore='^(.*tests.*|.*\\.(log|stats|config\\.json|gitignore|idea|travis|eslint).*)$' ./",
     "build:linux:ai32:deb": "electron-installer-debian --arch ai32 --src build/flap-app-launcher-linux-ia32/ --dest build/installers/",

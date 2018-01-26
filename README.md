@@ -26,7 +26,8 @@ There are 3 ways to install the application:
 
 #### Using NPM:
 ```bash
-sudo npm install -g flap-app-launcher
+sudo npm install -g --unsafe-perm=true flap-app-launcher
+#Note: "--unsafe-perm=true" is needed because of this: https://github.com/npm/npm/issues/17268 
 ```
 Run anywhere with `flap-app-launcher`.
 
