@@ -208,7 +208,7 @@ describe('Config', () => {
       configs1.saveConfig({})
         .then(() => {
           assert.equal(writeFile.callCount, 1);
-          configsFileDevelopment = writeFile.lastCall.args[0];
+          [configsFileDevelopment] = writeFile.lastCall.args;
 
           let configsFileProduction;
           process.env.NODE_ENV = 'production';
@@ -219,7 +219,7 @@ describe('Config', () => {
           configs2.saveConfig({})
             .then(() => {
               assert.equal(writeFile.callCount, 2);
-              configsFileProduction = writeFile.lastCall.args[0];
+              [configsFileProduction] = writeFile.lastCall.args;
               assert.notEqual(configsFileDevelopment, configsFileProduction);
               done();
             })

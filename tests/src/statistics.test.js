@@ -183,7 +183,7 @@ describe('Statistics', () => {
       );
       statistics1.saveStats({}, () => {
         assert.equal(writeFile.callCount, 1);
-        statisticsFileDevelopment = writeFile.lastCall.args[0];
+        [statisticsFileDevelopment] = writeFile.lastCall.args;
 
         let statisticsFileProduction;
         process.env.NODE_ENV = 'production';
@@ -193,7 +193,7 @@ describe('Statistics', () => {
         );
         statistics2.saveStats({}, () => {
           assert.equal(writeFile.callCount, 2);
-          statisticsFileProduction = writeFile.lastCall.args[0];
+          [statisticsFileProduction] = writeFile.lastCall.args;
           assert.notEqual(statisticsFileDevelopment, statisticsFileProduction);
           done();
         });

@@ -123,7 +123,7 @@ class Application {
   createSettingsWindow() {
     logger.verbose('Creating settings window..');
     this.settingsWindow = windows.createSettingsWindow();
-    this.settingsWindow.on('close', () => (this.settingsWindow = null));
+    this.settingsWindow.on('close', () => {this.settingsWindow = null;});
   }
 }
 

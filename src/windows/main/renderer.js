@@ -1,4 +1,4 @@
-const remote = require('electron').remote;
+const {remote} = require('electron');
 const ipc = require('electron').ipcRenderer;
 const ipcCommands = require('../../ipcCommands.js');
 const {addLeftPad, removeLeftPad} = require('../../stringUtils');

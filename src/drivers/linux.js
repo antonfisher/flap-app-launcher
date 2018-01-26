@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {join} = require('path');
 const {EOL, homedir} = require('os');
-const exec = require('child_process').exec;
+const {exec} = require('child_process');
 const logger = require('../logger');
 
 /**
