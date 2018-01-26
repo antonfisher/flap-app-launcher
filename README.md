@@ -35,13 +35,13 @@ Down load from [latest release page](https://github.com/antonfisher/flap-app-lau
 Or execute in the bash:
 ```bash
 # for x86_64
-wget https://github.com/antonfisher/flap-app-launcher/releases/download/v1.1.1/flap-app-launcher_1.1.1_x64.deb
-sudo dpkg -i flap-app-launcher_1.1.1_x64.deb
+wget https://github.com/antonfisher/flap-app-launcher/releases/download/v1.1.2/flap-app-launcher_1.1.2_x64.deb
+sudo dpkg -i flap-app-launcher_1.1.2_x64.deb
 flap-app-launcher
 
 # for ia32
-wget https://github.com/antonfisher/flap-app-launcher/releases/download/v1.1.1/flap-app-launcher_1.1.1_ai32.deb
-sudo dpkg -i flap-app-launcher_1.1.1_ia32.deb
+wget https://github.com/antonfisher/flap-app-launcher/releases/download/v1.1.2/flap-app-launcher_1.1.2_ai32.deb
+sudo dpkg -i flap-app-launcher_1.1.2_ia32.deb
 flap-app-launcher
 ```
 
