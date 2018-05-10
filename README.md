@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/antonfisher/flap-app-launcher.svg?branch=master)](https://travis-ci.org/antonfisher/flap-app-launcher)
 [![bitHound Dependencies](https://www.bithound.io/github/antonfisher/flap-app-launcher/badges/dependencies.svg)](https://www.bithound.io/github/antonfisher/flap-app-launcher/master/dependencies/npm)
 [![Coverage Status](https://coveralls.io/repos/github/antonfisher/flap-app-launcher/badge.svg?branch=master)](https://coveralls.io/github/antonfisher/flap-app-launcher?branch=master)
+![npm](https://img.shields.io/npm/dt/flap-app-launcher.svg)
 [![GitHub license](https://img.shields.io/github/license/antonfisher/flap-app-launcher.svg)](https://github.com/antonfisher/flap-app-launcher/blob/master/LICENSE)
 
 Compact applications launcher for Ubuntu.
