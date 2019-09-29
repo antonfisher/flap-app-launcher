@@ -2,6 +2,12 @@
   "name": "flap-app-launcher",
   "version": "1.1.2",
   "description": "Compact applications launcher for Ubuntu",
+  "author": {
+    "name": "Anton Fisher",
+    "email": "a.fschr@gmail.com",
+    "url": "http://antonfisher.com"
+  },
+  "license": "MIT",
   "main": "index.js",
   "bin": "./run-production.js",
   "scripts": {
@@ -20,20 +26,18 @@
     "build:linux:armv7l:deb": "electron-installer-debian --arch armv7l --src build/flap-app-launcher-linux-armv7l/ --dest build/installers/",
     "build:linux": "npm run build:linux:make && npm run build:linux:ai32:deb && npm run build:linux:x64:deb && npm run build:linux:amd64:deb && npm run build:linux:armv7l:deb",
     "build": "npm run lint && npm run test && npm run build:linux",
-    "release:patch": "standard-version -r patch",
-    "release:minor": "standard-version -r minor",
-    "release:major": "standard-version -r major"
+    "release:patch": "npx standard-version -r patch",
+    "release:minor": "npx standard-version -r minor",
+    "release:major": "npx standard-version -r major"
   },
   "keywords": [
     "electronjs",
     "launcher",
     "ubuntu"
   ],
-  "author": "Anton Fisher <a.fschr@gmail.com> (http://antonfisher.com)",
-  "license": "MIT",
   "dependencies": {
     "electron": "1.7.11",
-    "winston": "2.4.0"
+    "winston": "3.2.1"
   },
   "devDependencies": {
     "coveralls": "3.0.0",
