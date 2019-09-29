@@ -3,7 +3,7 @@ const simple = require('simple-mock');
 const proxyquire = require('proxyquire').noCallThru();
 
 let fileProps = {};
-const createStub = info => ({
+const createStub = (info) => ({
   winston: {
     Logger: function Logger() {
       this.info = info;

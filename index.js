@@ -1,4 +1,4 @@
-process.env.NODE_ENV = (process.env.NODE_ENV || 'production');
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
 const electron = require('electron');
 const logger = require('./src/logger');

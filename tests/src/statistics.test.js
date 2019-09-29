@@ -25,7 +25,8 @@ describe('Statistics', () => {
 
     it('loadStats() function should use cached stats if it exists', (done) => {
       statistics.setCachedStats(STATS_MOCK);
-      statistics.loadStats()
+      statistics
+        .loadStats()
         .then((stats) => {
           assert.deepEqual(stats, STATS_MOCK);
           done();
@@ -40,21 +41,30 @@ describe('Statistics', () => {
     it('commands should be sorted with respect to stats (path)', () => {
       statistics.setCachedStats({cal: 5, chrome: 10});
       const commands = [{path: 'c'}, {path: 'cal'}, {path: 'chrome'}, {path: 'b'}, {path: 'a'}];
-      const result = statistics.sortCommands(commands).map(({path}) => path).join(',');
+      const result = statistics
+        .sortCommands(commands)
+        .map(({path}) => path)
+        .join(',');
       assert.equal(result, 'chrome,cal,a,b,c');
     });
 
     it('commands should be sorted with respect to stats (rawPath)', () => {
       statistics.setCachedStats({cal: 5, chrome: 10});
       const commands = [{path: 'c'}, {rawPath: 'cal'}, {path: 'chrome'}, {path: 'b'}, {path: 'a'}];
-      const result = statistics.sortCommands(commands).map(({path, rawPath}) => path || rawPath).join(',');
+      const result = statistics
+        .sortCommands(commands)
+        .map(({path, rawPath}) => path || rawPath)
+        .join(',');
       assert.equal(result, 'chrome,cal,a,b,c');
     });
 
     it('commands should be sorted properly without stats', () => {
       statistics.setCachedStats();
       const commands = [{path: 'c'}, {path: 'cal'}, {path: 'chrome'}, {path: 'b'}, {path: 'a'}];
-      const result = statistics.sortCommands(commands).map(({path}) => path).join(',');
+      const result = statistics
+        .sortCommands(commands)
+        .map(({path}) => path)
+        .join(',');
       assert.equal(result, 'a,b,c,cal,chrome');
     });
   });
@@ -63,7 +73,8 @@ describe('Statistics', () => {
     it('should load stats from file', (done) => {
       const statistics = proxyquire('../../src/statistics.js', Object.assign({}, DEFAULT_STUB));
       statistics.setCachedStats(null);
-      statistics.loadStats()
+      statistics
+        .loadStats()
         .then((stats) => {
           assert.deepEqual(stats, STATS_MOCK);
           done();
@@ -81,7 +92,8 @@ describe('Statistics', () => {
         Object.assign({}, DEFAULT_STUB, {'./logger': {info, warn}, fs: {readFile, writeFile}})
       );
       statistics.setCachedStats(null);
-      statistics.loadStats()
+      statistics
+        .loadStats()
         .then(() => {
           assert.equal(warn.callCount, 0);
           assert.equal(writeFile.callCount, 0);
@@ -98,7 +110,8 @@ describe('Statistics', () => {
         Object.assign({}, DEFAULT_STUB, {fs: {readFile, writeFile}})
       );
       statistics.setCachedStats(null);
-      statistics.loadStats()
+      statistics
+        .loadStats()
         .then((stats) => {
           assert.deepEqual(stats, {});
           assert.equal(readFile.callCount, 1);
@@ -116,7 +129,8 @@ describe('Statistics', () => {
         Object.assign({}, DEFAULT_STUB, {fs: {readFile, writeFile}})
       );
       statistics.setCachedStats(null);
-      statistics.loadStats()
+      statistics
+        .loadStats()
         .then((stats) => {
           assert.deepEqual(stats, {});
           assert.equal(readFile.callCount, 1);
@@ -136,7 +150,8 @@ describe('Statistics', () => {
         Object.assign({}, {'./logger': {info, warn}, fs: {readFile, writeFile}})
       );
       statistics.setCachedStats(null);
-      statistics.loadStats()
+      statistics
+        .loadStats()
         .then(() => {
           assert.equal(warn.callCount, 1);
           assert.equal(writeFile.callCount, 1);
@@ -205,7 +220,8 @@ describe('Statistics', () => {
     it('should create new record in stats', (done) => {
       const statistics = proxyquire('../../src/statistics.js', Object.assign({}, DEFAULT_STUB));
       statistics.setCachedStats(null);
-      statistics.addRecord('cal')
+      statistics
+        .addRecord('cal')
         .then(() => {
           assert.deepEqual(statistics.getCachedStats(), Object.assign({}, STATS_MOCK, {cal: 1}));
           done();
@@ -216,7 +232,8 @@ describe('Statistics', () => {
     it('should update an existing record in stats', (done) => {
       const statistics = proxyquire('../../src/statistics.js', Object.assign({}, DEFAULT_STUB));
       statistics.setCachedStats(null);
-      statistics.addRecord('chrome')
+      statistics
+        .addRecord('chrome')
         .then(() => {
           assert.deepEqual(statistics.getCachedStats(), {chrome: 6});
           done();

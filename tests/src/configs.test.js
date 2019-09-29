@@ -25,7 +25,8 @@ describe('Config', () => {
 
     it('loadConfig() function should use cached config if it exists', (done) => {
       configs.setCachedConfig(CONFIG_MOCK);
-      configs.loadConfig()
+      configs
+        .loadConfig()
         .then((data) => {
           assert.deepEqual(data, CONFIG_MOCK);
           done();
@@ -38,7 +39,8 @@ describe('Config', () => {
     it('should load config from file', (done) => {
       const configs = proxyquire('../../src/configs.js', Object.assign({}, DEFAULT_STUB));
       configs.setCachedConfig(null);
-      configs.loadConfig()
+      configs
+        .loadConfig()
         .then((data) => {
           assert.deepEqual(data, CONFIG_MOCK);
           done();
@@ -56,7 +58,8 @@ describe('Config', () => {
         Object.assign({}, DEFAULT_STUB, {'./logger': {info, warn}, fs: {readFile, writeFile}})
       );
       configs.setCachedConfig(null);
-      configs.loadConfig()
+      configs
+        .loadConfig()
         .then(() => {
           assert.equal(warn.callCount, 0);
           assert.equal(writeFile.callCount, 0);
@@ -68,12 +71,10 @@ describe('Config', () => {
     it('should return default config in case of bad json', (done) => {
       const readFile = simple.stub().callbackWith(null, '}{');
       const writeFile = simple.stub().callbackWith(null);
-      const configs = proxyquire(
-        '../../src/configs.js',
-        Object.assign({}, DEFAULT_STUB, {fs: {readFile, writeFile}})
-      );
+      const configs = proxyquire('../../src/configs.js', Object.assign({}, DEFAULT_STUB, {fs: {readFile, writeFile}}));
       configs.setCachedConfig(null);
-      configs.loadConfig()
+      configs
+        .loadConfig()
         .then((data) => {
           assert.deepEqual(data, configs.DEFAULT_CONFIG);
           assert.equal(readFile.callCount, 1);
@@ -86,12 +87,10 @@ describe('Config', () => {
     it('should return default config in case of any error with file reading', (done) => {
       const readFile = simple.stub().callbackWith('Error');
       const writeFile = simple.stub().callbackWith(null);
-      const configs = proxyquire(
-        '../../src/configs.js',
-        Object.assign({}, DEFAULT_STUB, {fs: {readFile, writeFile}})
-      );
+      const configs = proxyquire('../../src/configs.js', Object.assign({}, DEFAULT_STUB, {fs: {readFile, writeFile}}));
       configs.setCachedConfig(null);
-      configs.loadConfig()
+      configs
+        .loadConfig()
         .then((data) => {
           assert.deepEqual(data, configs.DEFAULT_CONFIG);
           assert.equal(readFile.callCount, 1);
@@ -111,7 +110,8 @@ describe('Config', () => {
         Object.assign({}, {'./logger': {info, warn}, fs: {readFile, writeFile}})
       );
       configs.setCachedConfig(null);
-      configs.loadConfig()
+      configs
+        .loadConfig()
         .then(() => {
           assert.equal(warn.callCount, 1);
           assert.equal(writeFile.callCount, 1);
@@ -135,7 +135,8 @@ describe('Config', () => {
       const configs = proxyquire('../../src/configs.js', Object.assign({}, DEFAULT_STUB));
       const newConfig = {hotkey: 'super+space'};
       configs.setCachedConfig(null);
-      configs.saveConfig(newConfig)
+      configs
+        .saveConfig(newConfig)
         .then((data) => {
           assert.deepEqual(data, {hotkey: 'super+space', width: 500});
           done();
@@ -147,7 +148,8 @@ describe('Config', () => {
       const configs = proxyquire('../../src/configs.js', Object.assign({}, DEFAULT_STUB));
       const newConfig = {hotkey: 'space', hehe: 'no'};
       configs.setCachedConfig(null);
-      configs.saveConfig(newConfig)
+      configs
+        .saveConfig(newConfig)
         .then((data) => {
           assert.deepEqual(data, {hotkey: 'space', width: 500});
           done();
@@ -158,7 +160,8 @@ describe('Config', () => {
     it('should use default config if new values were not passed for save', (done) => {
       const configs = proxyquire('../../src/configs.js', Object.assign({}, DEFAULT_STUB));
       configs.setCachedConfig(null);
-      configs.saveConfig({})
+      configs
+        .saveConfig({})
         .then((data) => {
           assert.deepEqual(data, configs.DEFAULT_CONFIG);
           done();
@@ -170,7 +173,8 @@ describe('Config', () => {
       const configs = proxyquire('../../src/configs.js', Object.assign({}, DEFAULT_STUB));
       const previousConfig = {hotkey: 'space', width: 500};
       configs.setCachedConfig(previousConfig);
-      configs.saveConfig({})
+      configs
+        .saveConfig({})
         .then((data) => {
           assert.deepEqual(data, previousConfig);
           done();
@@ -181,12 +185,10 @@ describe('Config', () => {
     it('should log warning message if some error happened while writing file', (done) => {
       const warn = simple.stub();
       const writeFile = simple.stub().callbackWith('Error');
-      const configs = proxyquire(
-        '../../src/configs.js',
-        Object.assign({}, {'./logger': {warn}, fs: {writeFile}})
-      );
+      const configs = proxyquire('../../src/configs.js', Object.assign({}, {'./logger': {warn}, fs: {writeFile}}));
       configs.setCachedConfig(null);
-      configs.saveConfig(CONFIG_MOCK)
+      configs
+        .saveConfig(CONFIG_MOCK)
         .then(() => {
           assert.equal(warn.callCount, 1);
           assert.equal(writeFile.callCount, 1);
@@ -201,22 +203,18 @@ describe('Config', () => {
 
       let configsFileDevelopment;
       process.env.NODE_ENV = 'development';
-      const configs1 = proxyquire(
-        '../../src/configs.js',
-        Object.assign({}, {'./logger': {warn}, fs: {writeFile}})
-      );
-      configs1.saveConfig({})
+      const configs1 = proxyquire('../../src/configs.js', Object.assign({}, {'./logger': {warn}, fs: {writeFile}}));
+      configs1
+        .saveConfig({})
         .then(() => {
           assert.equal(writeFile.callCount, 1);
           [configsFileDevelopment] = writeFile.lastCall.args;
 
           let configsFileProduction;
           process.env.NODE_ENV = 'production';
-          const configs2 = proxyquire(
-            '../../src/configs.js',
-            Object.assign({}, {'./logger': {warn}, fs: {writeFile}})
-          );
-          configs2.saveConfig({})
+          const configs2 = proxyquire('../../src/configs.js', Object.assign({}, {'./logger': {warn}, fs: {writeFile}}));
+          configs2
+            .saveConfig({})
             .then(() => {
               assert.equal(writeFile.callCount, 2);
               [configsFileProduction] = writeFile.lastCall.args;

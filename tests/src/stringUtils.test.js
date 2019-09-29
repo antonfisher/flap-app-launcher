@@ -3,7 +3,7 @@ const stringUtils = require('../../src/stringUtils');
 
 describe('String Utils', () => {
   describe('addLeftPad()', () => {
-    it('should return the same substring if it isn\'t presented in the string', () => {
+    it("should return the same substring if it isn't presented in the string", () => {
       assert.equal(stringUtils.addLeftPad('abc', 'f'), 'f');
     });
 

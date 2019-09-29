@@ -20,7 +20,10 @@ function parseDesktopFile(content = '') {
     }
     const cutExec = line.replace(/^Exec=(.+)$/, '$1');
     if (cutExec !== line) {
-      path = cutExec.replace(/\t/g, '').replace(/"/g, '').replace(/ +[%$].+$/, '');
+      path = cutExec
+        .replace(/\t/g, '')
+        .replace(/"/g, '')
+        .replace(/ +[%$].+$/, '');
     }
     if (path && command) {
       apps.push({path, command});
@@ -46,7 +49,7 @@ function parseApplicationsFolder(path, useNames = false) {
         return resolve(applications);
       }
       fileNames
-        .filter(filename => filename.endsWith('.desktop'))
+        .filter((filename) => filename.endsWith('.desktop'))
         .forEach((filename) => {
           const content = fs.readFileSync(join(path, filename)).toString();
           parseDesktopFile(content).forEach((app) => {
@@ -71,7 +74,7 @@ module.exports = function LinuxDriver() {
         parseApplicationsFolder(join('/usr', 'share', 'applications')),
         parseApplicationsFolder(join(homedir(), '.local', 'share', 'applications'), true)
       ])
-        .then(([globalApplications, userApplications]) => ([].concat(globalApplications, userApplications)))
+        .then(([globalApplications, userApplications]) => [].concat(globalApplications, userApplications))
         .then((applications) => {
           const uniqueMap = new Map();
           return applications.filter(({command}) => (!uniqueMap.has(command) ? uniqueMap.set(command, true) : false));

@@ -9,11 +9,10 @@ const DEFAULT_CONFIG = {
 };
 
 const CONFIG_FILE_NAME = '.flap-app-launcher.config.json';
-const CONFIG_FILE_PATH = (
+const CONFIG_FILE_PATH =
   process.env.NODE_ENV === 'production'
     ? path.join(homedir(), CONFIG_FILE_NAME)
-    : path.join(__dirname, '..', CONFIG_FILE_NAME)
-);
+    : path.join(__dirname, '..', CONFIG_FILE_NAME);
 
 let _cachedConfig = null;
 
@@ -37,7 +36,7 @@ function validateValues(data) {
 
 function saveConfig(data) {
   data = validateValues(data);
-  return new Promise(resolve => (
+  return new Promise((resolve) =>
     fs.writeFile(CONFIG_FILE_PATH, JSON.stringify(data), {flag: 'w'}, (err) => {
       if (err) {
         logger.warn(`Cannot write config file: ${err}`);
@@ -45,7 +44,7 @@ function saveConfig(data) {
       setCachedConfig(data);
       return resolve(data);
     })
-  ));
+  );
 }
 
 function loadConfig() {

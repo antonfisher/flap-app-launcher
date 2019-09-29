@@ -15,10 +15,6 @@ coverage
 .flap-app-launcher.stats
 .flap-app-launcher.config.json
 
-# IDE
-.idea
-
-
 # NPM related
 .travis.yml
 .coveralls.yml

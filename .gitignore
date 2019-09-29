@@ -14,6 +14,3 @@ coverage
 .flap-app-launcher.log
 .flap-app-launcher.stats
 .flap-app-launcher.config.json
-
-# IDE
-.idea

@@ -4,11 +4,10 @@ const {homedir} = require('os');
 const logger = require('./logger');
 
 const STATISTICS_FILE_NAME = '.flap-app-launcher.stats';
-const STATISTICS_FILE_PATH = (
+const STATISTICS_FILE_PATH =
   process.env.NODE_ENV === 'production'
     ? path.join(homedir(), STATISTICS_FILE_NAME)
-    : path.join(__dirname, '..', STATISTICS_FILE_NAME)
-);
+    : path.join(__dirname, '..', STATISTICS_FILE_NAME);
 
 let _cachedStats = null;
 
@@ -69,24 +68,23 @@ function loadStats() {
 
 // return new stats to update global applications cache in runtime
 function addRecord(commandPath) {
-  return loadStats()
-    .then((stats) => {
-      stats[commandPath] = stats[commandPath] || 0;
-      stats[commandPath]++;
-      saveStats(stats);
-    });
+  return loadStats().then((stats) => {
+    stats[commandPath] = stats[commandPath] || 0;
+    stats[commandPath]++;
+    saveStats(stats);
+  });
 }
 
 function sortCommands(commands) {
   return commands.sort((a, b) => {
-    const aPath = (a.path || a.rawPath);
-    const bPath = (b.path || b.rawPath);
+    const aPath = a.path || a.rawPath;
+    const bPath = b.path || b.rawPath;
     const cachedStats = getCachedStats();
     if (cachedStats) {
       const aRunCount = cachedStats[aPath];
       const bRunCount = cachedStats[bPath];
       if (aRunCount || bRunCount) {
-        return ((bRunCount || 0) - (aRunCount || 0));
+        return (bRunCount || 0) - (aRunCount || 0);
       }
     }
     return aPath > bPath;

@@ -41,12 +41,12 @@ let lastKeyCode = '';
 inputUser.addEventListener('keydown', (e) => {
   const userValue = removeLeftPad(inputUser.value);
   const autocompleteValue = inputAutocomplete.value;
-  const double = (lastKeyCode === e.code);
+  const double = lastKeyCode === e.code;
 
   lastKeyCode = e.code;
 
   if (e.code === 'Escape') {
-    const hide = (!userValue || double);
+    const hide = !userValue || double;
     inputUser.value = '';
     inputAutocomplete.value = '';
     if (hide) {
@@ -56,7 +56,7 @@ inputUser.addEventListener('keydown', (e) => {
   } else if (e.code === 'Enter' && userValue) {
     // TODO: use styles
     inputUser.style.color = 'yellow';
-    const appCommand = applicationList.find(({command}) => (command === inputAutocomplete.value));
+    const appCommand = applicationList.find(({command}) => command === inputAutocomplete.value);
     ipc.send(ipcCommands.RUN_COMMAND, appCommand || {rawPath: userValue});
     e.preventDefault();
   } else if (e.code === 'Tab') {
@@ -87,7 +87,7 @@ inputUser.addEventListener('input', () => {
 
   if (value) {
     autocomplete = autocompleteGenerator(applicationList, value);
-    inputAutocomplete.value = (autocomplete.next().value || '');
+    inputAutocomplete.value = autocomplete.next().value || '';
     inputUser.value = addLeftPad(inputAutocomplete.value, value);
   } else {
     inputAutocomplete.value = '';

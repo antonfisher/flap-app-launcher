@@ -18,7 +18,9 @@
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "test:install-dev-to-global": "sudo npm -g remove flap-app-launcher && sudo npm install -g ./ && npm list -g --depth 0",
     "test:install-npm-to-global": "sudo npm -g remove flap-app-launcher && sudo npm install -g --unsafe-perm=true flap-app-launcher && npm list -g --depth 0",
-    "lint": "eslint --ignore-path .gitignore --ignore-pattern node_modules -- .",
+    "lint": "eslint --ignore-path .gitignore -- .",
+    "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
+    "format": "npm run prettier && npm run lint",
     "build:linux:make": "electron-packager --platform=linux --arch=all --overwrite --out=build --ignore='^(.*tests.*|.*\\.(log|stats|config\\.json|gitignore|idea|travis|eslint).*)$' ./",
     "build:linux:ai32:deb": "electron-installer-debian --arch ai32 --src build/flap-app-launcher-linux-ia32/ --dest build/installers/",
     "build:linux:x64:deb": "electron-installer-debian --arch x64 --src build/flap-app-launcher-linux-x64/ --dest build/installers/",
@@ -43,14 +45,15 @@
     "coveralls": "3.0.0",
     "electron-installer-debian": "0.8.0",
     "electron-packager": "10.1.1",
-    "eslint": "4.16.0",
-    "eslint-config-airbnb-base": "12.1.0",
-    "eslint-plugin-import": "2.8.0",
+    "eslint": "6.5.0",
+    "eslint-config-prettier": "6.3.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-prettier": "3.1.1",
     "istanbul": "0.4.5",
     "mocha": "5.0.0",
     "mocha-lcov-reporter": "1.3.0",
+    "prettier": "1.18.2",
     "proxyquire": "1.8.0",
-    "simple-mock": "0.8.0",
-    "standard-version": "4.3.0"
+    "simple-mock": "0.8.0"
   }
 }

@@ -2,7 +2,7 @@ const assert = require('assert');
 const simple = require('simple-mock');
 const proxyquire = require('proxyquire').noCallThru();
 
-const createStub = loadURL => ({
+const createStub = (loadURL) => ({
   electron: {
     screen: {
       getPrimaryDisplay() {

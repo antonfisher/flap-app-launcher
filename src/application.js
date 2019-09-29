@@ -15,16 +15,17 @@ class Application {
   }
 
   run() {
-    configs.loadConfig()
-      .then(loadedConfig => this.saveConfig(loadedConfig))
+    configs
+      .loadConfig()
+      .then((loadedConfig) => this.saveConfig(loadedConfig))
       .then(() => Promise.all([this.driver.getApplicationList(), statistics.loadStats()]))
       .then(([applications, stats]) => this.combineAppsAndStats(applications, stats))
-      .then(applications => statistics.sortCommands(applications))
-      .then(applications => this.saveApplicationList(applications))
+      .then((applications) => statistics.sortCommands(applications))
+      .then((applications) => this.saveApplicationList(applications))
       .then(() => this.registerShortcut())
       .then(() => this.bindIpc())
       .then(() => this.createMainWindow())
-      .catch(err => logger.error('Application error:', err));
+      .catch((err) => logger.error('Application error:', err));
   }
 
   saveConfig(loadedConfig) {
@@ -88,7 +89,8 @@ class Application {
     //settings window
     ipc.on(ipcCommands.UPDATE_SETTINGS, (event, changedByUserConfig) => {
       logger.verbose('Save new config:', changedByUserConfig);
-      configs.saveConfig(changedByUserConfig)
+      configs
+        .saveConfig(changedByUserConfig)
         .then((newConfig) => {
           this.saveConfig(newConfig);
           if (this.mainWindow) {
@@ -123,7 +125,9 @@ class Application {
   createSettingsWindow() {
     logger.verbose('Creating settings window..');
     this.settingsWindow = windows.createSettingsWindow();
-    this.settingsWindow.on('close', () => {this.settingsWindow = null;});
+    this.settingsWindow.on('close', () => {
+      this.settingsWindow = null;
+    });
   }
 }
 
