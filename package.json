@@ -21,7 +21,7 @@
     "lint": "eslint --ignore-path .gitignore -- .",
     "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
     "format": "npm run prettier && npm run lint",
-    "build:linux:make": "electron-packager --platform=linux --arch=all --overwrite --out=build --ignore='^(.*tests.*|.*\\.(log|stats|config\\.json|gitignore|idea|travis|eslint).*)$' ./",
+    "build:linux:make": "electron-packager --platform=linux --arch=all --overwrite --out=build --ignore='^(.*tests.*|.*\\.(log|stats|config\\.json|git|travis|eslint|prettier|coveralls).*)$' ./",
     "build:linux:ai32:deb": "electron-installer-debian --arch ai32 --src build/flap-app-launcher-linux-ia32/ --dest build/installers/",
     "build:linux:x64:deb": "electron-installer-debian --arch x64 --src build/flap-app-launcher-linux-x64/ --dest build/installers/",
     "build:linux:amd64:deb": "electron-installer-debian --arch amd64 --src build/flap-app-launcher-linux-x64/ --dest build/installers/",
@@ -33,18 +33,19 @@
     "release:major": "npx standard-version -r major"
   },
   "keywords": [
+    "electron",
     "electronjs",
     "launcher",
     "ubuntu"
   ],
   "dependencies": {
-    "electron": "1.7.11",
     "winston": "3.2.1"
   },
   "devDependencies": {
     "coveralls": "3.0.6",
-    "electron-installer-debian": "0.8.0",
-    "electron-packager": "10.1.1",
+    "electron": "3.1.13",
+    "electron-installer-debian": "2.0.1",
+    "electron-packager": "14.0.6",
     "eslint": "6.5.0",
     "eslint-config-prettier": "6.3.0",
     "eslint-plugin-import": "2.18.2",
